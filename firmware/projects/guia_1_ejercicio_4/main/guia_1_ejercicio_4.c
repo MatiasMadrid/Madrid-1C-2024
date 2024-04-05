@@ -1,25 +1,18 @@
-/*! @mainpage Template
+/*! @mainpage Ejercicio_4
  *
  * @section genDesc General Description
  *
- * This section describes how the program works.
- *
- * <a href="https://drive.google.com/...">Operation Example</a>
- *
- * @section hardConn Hardware Connection
- *
- * |    Peripheral  |   ESP32   	|
- * |:--------------:|:--------------|
- * | 	PIN_X	 	| 	GPIO_X		|
+ * Este código permite mostrar en la placa LCD un número de hasta tres dígitos.
+ * El número decimal, se transforma en BCD para que pueda ser interpretado por el display
  *
  *
  * @section changelog Changelog
  *
  * |   Date	    | Description                                    |
  * |:----------:|:-----------------------------------------------|
- * | 12/09/2023 | Document creation		                         |
+ * | 05/04/2024 | Document creation		                         |
  *
- * @author Albano Peñalva (albano.penalva@uner.edu.ar)
+ * @author Madrid Matias (pablo.madrid@ingenieria.uner.edu.ar)
  *
  */
 
@@ -32,22 +25,33 @@
 #include "led.h" 
 #include "switch.h"
 #include "gpio_mcu.h"
+
 /*==================[macros and definitions]=================================*/
 
 /*==================[internal data definition]===============================*/
 
-#define ON = 1
-#define OFF = 0
-#define N_DIGITOS = 3
+/** @def N_DIGITOS
+ *  @brief Constante con el numero máximo de digitos
+*/
+#define N_DIGITOS 3
 
 /*==================[internal functions declaration]=========================*/
-
+/** @struct gpioConf_t
+ *  @brief Estructura de GPIOs, que contiene numero de pin y dir que representa el estado (IN, OUT)
+*/
 typedef struct
 {
 	gpio_t pin;			/*!< GPIO pin number */
 	io_t dir;			/*!< GPIO direction '0' IN;  '1' OUT*/
 } gpioConf_t;
 
+
+/** @fn convertToBcdArray (uint32_t data, uint8_t digits, uint8_t * bcd_number)
+ * @brief Funcion que recibe un número decimal y le otorga a un arreglo un digito en BCD de dicho numero en cada una de sus posiciones
+ * @param data valor del número decimal
+ * @param digitis cantidad de dígitos del numero
+ * @param bcd_number puntero a un arreglo
+*/
 void  convertToBcdArray (uint32_t data, uint8_t digits, uint8_t * bcd_number)
 { 
 	for (uint i = digits; i>0; i--){
@@ -56,6 +60,11 @@ void  convertToBcdArray (uint32_t data, uint8_t digits, uint8_t * bcd_number)
 	}
 }
 
+/** @fn modificarStatus(uint32_t data, gpioConf_t *vectorGPIO)
+ * @brief Esta función recibe un número en BCD (dígito) y un vector de GPIO, enciende o apaga el GPIO correspondiente para que codifiquen dicho número
+ * @param data número en BCD
+ * @param vectorGPIO puntero a vector de GPIO
+*/
 void modificarStatus(uint32_t data, gpioConf_t *vectorGPIO){
 	for (uint8_t i=0; i<4; i++){
 		if ((data&(1<<i)) == 0){
@@ -66,20 +75,26 @@ void modificarStatus(uint32_t data, gpioConf_t *vectorGPIO){
 		}
 	}
 }
+
+/** @fn displayLeds(uint32_t data, uint digitos, gpioConf_t *vectorGPIO, gpioConf_t *vectorGPIO_map)
+ * @brief Función que recibe un número decimal, la cantidad de dígitos, un vector de GPIO para decodificar un nnumero y un vector GPIO para mapear los digitos a cada led. Muestra el numero en el LCD.
+ * @param data número decimal
+ * @param digitos cantidad de dígitos
+ * @param vectorGPIO vector de GPIO que codifica el numero (20, 21, 22 y 23)
+ * @param vectorGPIO_map vector de GPIO que mapea a cada BCD de 7 segmentos (19, 18 y 9)
+*/
 void displayLeds(uint32_t data, uint digitos, gpioConf_t *vectorGPIO, gpioConf_t *vectorGPIO_map){
 	
 	uint8_t arreglo[digitos];
 	convertToBcdArray (data, digitos, arreglo);
 
-	for (int i=0; i<3; i++){ //define a digitos = 3
+	for (int i=0; i<N_DIGITOS; i++){ //define a digitos = 3
 		//on/off (pulso?)
 
 		modificarStatus(arreglo[i], vectorGPIO);
 
 		GPIOOn(vectorGPIO_map[i].pin);
 		GPIOOff(vectorGPIO_map[i].pin);
-		
-		
 		
 	}
 }
@@ -90,7 +105,7 @@ void displayLeds(uint32_t data, uint digitos, gpioConf_t *vectorGPIO, gpioConf_t
 void app_main(void){
 
 
-	uint32_t numero = 735;
+	uint32_t numero = 738;
 	uint digitos = 3;
 
 	//uint8_t arreglo[digitos];

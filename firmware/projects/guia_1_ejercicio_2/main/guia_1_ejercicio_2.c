@@ -1,16 +1,18 @@
-/*! @mainpage Blinking switch
+/** @mainpage Blinking switch
  *
  * \section genDesc General Description
  *
- * This example makes LED_1 and LED_2 blink if SWITCH_1 or SWITCH_2 are pressed.
+ * En este código se modificó el ejemplo 1_blinking_switch otrogado por la cátedra, con la finalidad de hacer titilar 
+ * los leds 1 y 2 al mantener presionadas las teclas 1 y 2 correspondientemente, además de hacer titilar el led3 al mantener
+ * ambas teclas presionadas. 
  *
  * @section changelog Changelog
  *
  * |   Date	    | Description                                    |
  * |:----------:|:-----------------------------------------------|
- * | 12/09/2023 | Document creation		                         |
+ * | 04/04/2024 | Document creation		                         |
  *
- * @author Albano Peñalva (albano.penalva@uner.edu.ar)
+ * @author Madrid Matias
  *
  */
 
@@ -23,12 +25,18 @@
 #include "led.h" 
 #include "switch.h"
 /*==================[macros and definitions]=================================*/
+
+/** @def CONFIG_BLINK_PERIOD
+ *  @brief Valor del período que tienen los leds para titilar
+*/
 #define CONFIG_BLINK_PERIOD 100
 /*==================[internal data definition]===============================*/
 
 /*==================[internal functions declaration]=========================*/
 
 /*==================[external functions definition]==========================*/
+
+
 void app_main(void){
 	uint8_t teclas; //entero sin signo de 8 bits
 	LedsInit();		//incializa las teclas
