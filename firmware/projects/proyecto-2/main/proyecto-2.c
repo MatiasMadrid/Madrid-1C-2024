@@ -78,6 +78,8 @@ static void LedTask(void *pvParameter){
 	uint16_t distancia;
     while(1){
         if (MedirON == true){
+
+            //LcdItsE0803
             distancia = HcSr04ReadDistanceInCentimeters();
             //distancia_medida = distancia;
             modificarLed(distancia);
@@ -112,10 +114,6 @@ static void OnOffTask(void *pvParameter){
     } 
 }
 
-static void Led3Task(void *pvParameter){
-
-    
-}
 /*==================[internal functions declaration]=========================*/
 
 TaskHandle_t led1_task_handle = NULL;
@@ -124,9 +122,9 @@ TaskHandle_t led3_task_handle = NULL;
 
 /*==================[external functions definition]==========================*/
 
-// inicializa HcSr04Init(eco, triger)
+
 void app_main(void){
-	HcSr04Init(ECHO, TRIGGER);
+	HcSr04Init(ECHO, TRIGGER); // inicializa HcSr04Init(eco, triger)
     LedsInit();
     LcdItsE0803Init();
     SwitchesInit();
