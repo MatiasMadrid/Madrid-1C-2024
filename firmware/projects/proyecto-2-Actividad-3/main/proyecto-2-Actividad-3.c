@@ -36,7 +36,7 @@
 #include "hc_sr04.h"
 #include "lcditse0803.h"
 #include "switch.h"
-
+#include "timer_mcu.h"
 
 /*==================[macros and definitions]=================================*/
 
@@ -77,11 +77,12 @@ void modificarLed (uint16_t distancia) {
 static void LedTask(void *pvParameter){
 	uint16_t distancia;
     while(1){
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); 
         if (MedirON == true){
             distancia = HcSr04ReadDistanceInCentimeters();
             //distancia_medida = distancia;
             modificarLed(distancia);
-            //printf("distancia %d \n",distancia);
+            printf("distancia %d \n",distancia);
             if (hold){
                 LcdItsE0803Write(distancia);
             }
@@ -92,7 +93,7 @@ static void LedTask(void *pvParameter){
         }
 
 
-        vTaskDelay(CONFIG_BLINK_PERIOD_LED_1 / portTICK_PERIOD_MS);
+        //vTaskDelay(CONFIG_BLINK_PERIOD_LED_1 / portTICK_PERIOD_MS); //borrar 
 
     }
 }
@@ -101,15 +102,18 @@ static void OnOffTask(void *pvParameter){
     uint8_t teclas;
     while (1)
     {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         teclas  = SwitchesRead();
         if (teclas == SWITCH_1){
             MedirON = !MedirON;
         } else if (teclas == SWITCH_2){
             hold = !hold;
         }
-        vTaskDelay(PERDIOD_SWITCH / portTICK_PERIOD_MS);
+        //
         //printf("tecla %d \n",MedirON);
+        //vTaskDelay(PERDIOD_SWITCH / portTICK_PERIOD_MS); 
     } 
+    
 }
 
 static void Led3Task(void *pvParameter){
@@ -118,25 +122,50 @@ static void Led3Task(void *pvParameter){
 }
 /*==================[internal functions declaration]=========================*/
 
-TaskHandle_t led1_task_handle = NULL;
-TaskHandle_t led2_task_handle = NULL;
-TaskHandle_t led3_task_handle = NULL;
+TaskHandle_t task_handle_medir_y_on_off = NULL;
+TaskHandle_t task_handle_OnOff_medir = NULL;
+
+/**
+ * @brief Función invocada en la interrupción del timer A
+ */
+void funcTimerMedir(void* param){
+    vTaskNotifyGiveFromISR(task_handle_medir_y_on_off, pdFALSE);    /* Envía una notificación a la tarea asociada al LED_1 */
+}
+
+void funcTimerOnOffMedir(void* param){
+    vTaskNotifyGiveFromISR(task_handle_OnOff_medir, pdFALSE);
+}
+
+
 
 /*==================[external functions definition]==========================*/
 
 // inicializa HcSr04Init(eco, triger)
 void app_main(void){
+    //inicialización de timers
+    timer_config_t timer_task_1 = {
+        .timer = TIMER_A,
+        .period = CONFIG_BLINK_PERIOD_LED_1,
+        .func_p = funcTimerMedir,
+        .param_p = NULL
+    };
+    timer_config_t timer_task_2 = {
+        .timer = TIMER_B,
+        .period = PERDIOD_SWITCH,
+        .func_p = funcTimerOnOffMedir,
+        .param_p = NULL
+    };
+
+    //inicialización de perifericos
 	HcSr04Init(ECHO, TRIGGER);
     LedsInit();
     LcdItsE0803Init();
     SwitchesInit();
-    xTaskCreate(&LedTask, "medir", 2048, NULL, 5, NULL);
-    xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, NULL);
-    //xTaskCreate(&mostrar-por-display,"mostrar por display", 2048, NULL, 5, NULL);
 
-   // xTaskCreate(&Led1Task, "apagar-y-prender", 2048, NULL, 5, NULL);
-    //xTaskCreate(&Led2Task, "LED_2", 512, NULL, 5, &led2_task_handle);
-    //xTaskCreate(&Led3Task, "LED_3", 512, NULL, 5, &led3_task_handle);
+    //creación de tareas
+    xTaskCreate(&LedTask, "medir", 2048, NULL, 5, &task_handle_medir_y_on_off);
+    xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, &task_handle_OnOff_medir);
+
 	
 }
 /*==================[end of file]============================================*/

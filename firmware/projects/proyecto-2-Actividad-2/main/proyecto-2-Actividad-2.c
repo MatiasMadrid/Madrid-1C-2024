@@ -36,14 +36,14 @@
 #include "hc_sr04.h"
 #include "lcditse0803.h"
 #include "switch.h"
-
+#include "timer_mcu.h"
 
 /*==================[macros and definitions]=================================*/
 
-#define CONFIG_BLINK_PERIOD_LED_1 1000
-#define PERDIOD_SWITCH 50
+#define TIME_PERIOD 1000000 //1000000 ???
 #define ECHO GPIO_3
 #define TRIGGER GPIO_2
+uint8_t ACTUAL_SWITCH; //en caso de borrar tarea, borrar
 
 //uint16_t distancia_medida = 0
 
@@ -74,14 +74,14 @@ void modificarLed (uint16_t distancia) {
     };
 }
 
-static void LedTask(void *pvParameter){
+static void DistanceTask(void *pvParameter){
 	uint16_t distancia;
     while(1){
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  /* La tarea espera en este punto hasta recibir una notificación */
+
         if (MedirON == true){
             distancia = HcSr04ReadDistanceInCentimeters();
-            //distancia_medida = distancia;
             modificarLed(distancia);
-            //printf("distancia %d \n",distancia);
             if (hold){
                 LcdItsE0803Write(distancia);
             }
@@ -92,51 +92,92 @@ static void LedTask(void *pvParameter){
         }
 
 
-        vTaskDelay(CONFIG_BLINK_PERIOD_LED_1 / portTICK_PERIOD_MS);
-
     }
 }
 
 static void OnOffTask(void *pvParameter){
-    uint8_t teclas;
+
+    //uint8_t teclas;
     while (1)
     {
-        teclas  = SwitchesRead();
-        if (teclas == SWITCH_1){
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  /* La tarea espera en este punto hasta recibir una notificación */
+        //teclas  = SwitchesRead();
+        if (ACTUAL_SWITCH == SWITCH_1){
             MedirON = !MedirON;
-        } else if (teclas == SWITCH_2){
+        } else if (ACTUAL_SWITCH == SWITCH_2){
             hold = !hold;
         }
-        vTaskDelay(PERDIOD_SWITCH / portTICK_PERIOD_MS);
-        //printf("tecla %d \n",MedirON);
-    } 
-}
-
-static void Led3Task(void *pvParameter){
-
+    }
     
 }
+
+void read_switch(void){
+    ACTUAL_SWITCH = SwitchesRead();
+}
+
+/*
+void on_off(void){
+    uint8_t tecla;
+    tecla  = SwitchesRead();
+    if (tecla == SWITCH_1){
+        MedirON = !MedirON;
+    }
+}
+
+void hold(void){
+    uint8_t tecla;
+    tecla  = SwitchesRead();
+    if (tecla == SWITCH_2){
+        hold = !hold;
+    }
+}
+*/
+
 /*==================[internal functions declaration]=========================*/
 
-TaskHandle_t led1_task_handle = NULL;
-TaskHandle_t led2_task_handle = NULL;
-TaskHandle_t led3_task_handle = NULL;
+TaskHandle_t task_handle_medir = NULL;
+TaskHandle_t task_handle_OnOff_medir = NULL;
+
+/**
+ * @brief Función invocada en la interrupción del timer A
+ */
+void funcTimer(void* param){
+    vTaskNotifyGiveFromISR(task_handle_medir, pdFALSE);    /* Envía una notificación a la tarea asociada al LED_1 */
+    vTaskNotifyGiveFromISR(task_handle_OnOff_medir, pdFALSE); //BORRAR
+}
+
+
 
 /*==================[external functions definition]==========================*/
 
 // inicializa HcSr04Init(eco, triger)
 void app_main(void){
+    //inicialización de timers
+    timer_config_t timer_global = {
+        .timer = TIMER_A,
+        .period = TIME_PERIOD,
+        .func_p = funcTimer,
+        .param_p = NULL
+    };
+
+
+    //inicialización de perifericos
 	HcSr04Init(ECHO, TRIGGER);
     LedsInit();
     LcdItsE0803Init();
     SwitchesInit();
-    xTaskCreate(&LedTask, "medir", 2048, NULL, 5, NULL);
-    xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, NULL);
-    //xTaskCreate(&mostrar-por-display,"mostrar por display", 2048, NULL, 5, NULL);
 
-   // xTaskCreate(&Led1Task, "apagar-y-prender", 2048, NULL, 5, NULL);
-    //xTaskCreate(&Led2Task, "LED_2", 512, NULL, 5, &led2_task_handle);
-    //xTaskCreate(&Led3Task, "LED_3", 512, NULL, 5, &led3_task_handle);
+    //creación de tareas
+
+
+    SwitchActivInt(SWITCH_1, &read_switch, NULL); //on_off
+    SwitchActivInt(SWITCH_2, &read_switch, NULL); //hold
+
+    xTaskCreate(&DistanceTask, "medir", 2048, NULL, 5, &task_handle_medir);
+    xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, &task_handle_OnOff_medir); //borrar tarea? esta controla las teclas, cambiarla por funciones
+                                                                                                    //en el switchactivint
+
+    TimerStart(timer_global.timer);
 	
 }
 /*==================[end of file]============================================*/
