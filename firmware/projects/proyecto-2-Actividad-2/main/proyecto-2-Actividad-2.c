@@ -40,12 +40,9 @@
 
 /*==================[macros and definitions]=================================*/
 
-#define TIME_PERIOD 1000000 //1000000 ???
+#define TIME_PERIOD 1000000
 #define ECHO GPIO_3
 #define TRIGGER GPIO_2
-//uint8_t ACTUAL_SWITCH; //en caso de borrar tarea, borrar
-
-//uint16_t distancia_medida = 0
 
 
 /*==================[internal data definition]===============================*/
@@ -114,12 +111,6 @@ static void OnOffTask(void *pvParameter){
 }
 */
 
-/*
-void read_switch(void){
-    ACTUAL_SWITCH = SwitchesRead();
-}
-*/
-
 
 void read_switch1(void){
     MedirON = !MedirON;
@@ -128,7 +119,6 @@ void read_switch1(void){
 
 void read_switch2(void){
     hold = !hold;
-
 }
 
 
