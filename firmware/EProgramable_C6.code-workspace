@@ -1,40 +1,59 @@
 {
     "folders": [
         {
-            "path": "./drivers"
+            "name": "drivers",
+            "path": "drivers"
         },
         {
-            "path": "./projects/0_blinking"
+            "name": "0_blinking",
+            "path": "projects/0_blinking"
         },
         {
-            "path": "./projects/1_blinking_switch"
+            "name": "1_blinking_switch",
+            "path": "projects/1_blinking_switch"
         },
         {
+            "name": "2_blinking_tasks",
             "path": "projects/2_blinking_tasks"
         },
         {
-            "path": "./projects/x_template"
-        },
-        {
-            "path": "projects/guia_1_ejercicio_2"
-        },
-        {
-            "path": "projects/guia_1_ejercicio_3"
-        },
-        {
-            "path": "projects/guia_1_ejercicio_4"
-        },
-        {
-            "path": "projects/proyecto-2"
-        },
-        {
-            "path": "projects/proyecto-2-Actividad-2"
-        },
-        {
+            "name": "3_blinking_timer",
             "path": "projects/3_blinking_timer"
         },
         {
+            "name": "x_template",
+            "path": "projects/x_template"
+        },
+        {
+            "name": "guia_1_ejercicio_2",
+            "path": "projects/guia_1_ejercicio_2"
+        },
+        {
+            "name": "guia_1_ejercicio_3",
+            "path": "projects/guia_1_ejercicio_3"
+        },
+        {
+            "name": "guia_1_ejercicio_4",
+            "path": "projects/guia_1_ejercicio_4"
+        },
+        {
+            "name": "proyecto-2-Actividad-1",
+            "path": "projects/proyecto-2-Actividad-1"
+        },
+        {
+            "name": "proyecto-2-Actividad-2",
+            "path": "projects/proyecto-2-Actividad-2"
+        },
+        {
+            "name": "proyecto-2-Actividad-3",
             "path": "projects/proyecto-2-Actividad-3"
+        },
+        {
+            "name": "proyecto-2-Actividad-4",
+            "path": "projects/proyecto-2-Actividad-4"
+        },
+        {
+            "path": "projects/proyecto-integrador"
         }
     ],
     "settings": {
@@ -90,7 +109,18 @@
             "soc_caps.h": "c",
             "mpu6050.h": "c",
             "i2c_mcu.h": "c",
-            "vector": "c"
+            "vector": "c",
+            "charconv": "c",
+            "complex": "c",
+            "format": "c",
+            "numeric": "c",
+            "sstream": "c",
+            "xmemory": "c",
+            "xstring": "c",
+            "*.tcc": "c",
+            "fstream": "c",
+            "limits": "c",
+            "functional": "c"
         },
     },
     "tasks": {

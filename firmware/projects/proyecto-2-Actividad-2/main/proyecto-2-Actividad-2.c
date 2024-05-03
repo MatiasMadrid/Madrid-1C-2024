@@ -1,25 +1,42 @@
-/*! @mainpage Template
+/*! @mainpage Proyecto 2 / Actividad 2
  *
  * @section genDesc General Description
  *
- * This section describes how the program works.
+ * Código diseñado para medir distancia y mostrarla por un display LCD.
+ * Además enciende LEDs dependiendo que distancia esté midiendo.
+ * Tiene la funcionalidad (mediente interrupciones) de encender y detener la medición, y mantener el resultado por pantalla.
  *
- * <a href="https://drive.google.com/...">Operation Example</a>
  *
  * @section hardConn Hardware Connection
  *
- * |    Peripheral  |   ESP32   	|
+ * |    HC-SR04     |   ESP32   	|
  * |:--------------:|:--------------|
- * | 	PIN_X	 	| 	GPIO_X		|
+ * | 	ECHO	 	| 	GPIO_3		|
+ * | 	TRIGGER	 	| 	GPIO_2		|
+ * | 	+5V  	 	| 	+5V	    	|
+ * | 	GND 	 	| 	GND	    	|
+ * 
+ * 
+ * |    display LCD |   ESP32   	|
+ * |:--------------:|:--------------|
+ * | 	D1	     	| 	GPIO_20		|
+ * | 	D2	     	| 	GPIO_21  	|
+ * | 	D3 	     	| 	GPIO_22  	|
+ * | 	D4	     	| 	GPIO_23  	|
+ * | 	SEL_1	    | 	GPIO_19  	|
+ * | 	SEL_2	    | 	GPIO_18  	|
+ * | 	SEL_3     	|  	GPIO_9  	|
+ * | 	+5V	     	| 	+5V    		|
+ * | 	GND	     	| 	GND    		|
  *
  *
  * @section changelog Changelog
  *
  * |   Date	    | Description                                    |
  * |:----------:|:-----------------------------------------------|
- * | 12/09/2023 | Document creation		                         |
+ * | 30/04/2024 | Document creation		                         |
  *
- * @author Albano Peñalva (albano.penalva@uner.edu.ar)
+ * @author  Matias Madrid (pablo.madrid@ingenieria.uner.edu.ar)
  *
  */
 
@@ -40,16 +57,34 @@
 
 /*==================[macros and definitions]=================================*/
 
+/** @def TIME_PERIOD
+ *  @brief Periodo del timer (en us)
+*/
 #define TIME_PERIOD 1000000
+
+/** @def ECHO
+ *  @brief Constante inicializar el ECHO con GPIO_3
+*/
 #define ECHO GPIO_3
+
+/** @def TRIGGER
+ *  @brief Constante inicializar el TRIGGER con GPIO_2
+*/
 #define TRIGGER GPIO_2
 
 
 /*==================[internal data definition]===============================*/
 
+/** @brief Variable global que indica si se debe realizar la medición */
 bool MedirON = true;
+
+/** @brief Variable global que indica si se debe mantener la última medición en pantalla */
 bool hold = true;
 
+/** @fn modificarLed (uint16_t distancia)
+ * @brief Funcion que recibe la distancia y según su valor enciende o paga LEDs.
+ * @param distancia valor de la distancia
+*/
 void modificarLed (uint16_t distancia) {
     if (distancia < 10){
         LedOff(LED_1);
@@ -71,6 +106,9 @@ void modificarLed (uint16_t distancia) {
     };
 }
 
+/** @fn DistanceTask(void *pvParameter)
+ * @brief Tarea para medir distancia y controlar el estado de los LEDs.
+*/
 static void DistanceTask(void *pvParameter){
 	uint16_t distancia;
     while(1){
@@ -93,30 +131,17 @@ static void DistanceTask(void *pvParameter){
     }
 }
 
-/*
-
-static void OnOffTask(void *pvParameter){
-
-    //uint8_t teclas;
-    while (1)
-    {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  // La tarea espera en este punto hasta recibir una notificación 
-        teclas  = SwitchesRead();
-        if (ACTUAL_SWITCH == SWITCH_1){
-            MedirON = !MedirON;
-        } else if (ACTUAL_SWITCH == SWITCH_2){
-            hold = !hold;
-        }
-    }
-}
+/** @fn read_switch1(void)
+ * @brief Función para cambiar el estado de la bandera MedirON al presionar la tecla switch1.
 */
-
-
 void read_switch1(void){
     MedirON = !MedirON;
 
 }
 
+/** @fn read_switch2(void)
+ * @brief Función para cambiar el estado de la bandera hold al presionar la tecla switch2.
+*/
 void read_switch2(void){
     hold = !hold;
 }
@@ -124,22 +149,20 @@ void read_switch2(void){
 
 /*==================[internal functions declaration]=========================*/
 
+/** @brief Objeto de tipo TaskHandle_t que se asocia con la tarea*/
 TaskHandle_t task_handle_medir = NULL;
-TaskHandle_t task_handle_OnOff_medir = NULL;
 
 /**
  * @brief Función invocada en la interrupción del timer A
  */
 void funcTimer(void* param){
-    vTaskNotifyGiveFromISR(task_handle_medir, pdFALSE);    /* Envía una notificación a la tarea asociada al LED_1 */
-    //vTaskNotifyGiveFromISR(task_handle_OnOff_medir, pdFALSE); //BORRAR
+    vTaskNotifyGiveFromISR(task_handle_medir, pdFALSE); 
 }
 
 
 
 /*==================[external functions definition]==========================*/
 
-// inicializa HcSr04Init(eco, triger)
 void app_main(void){
     //inicialización de timers
     timer_config_t timer_global = {
@@ -160,8 +183,6 @@ void app_main(void){
     SwitchActivInt(SWITCH_2, &read_switch2, NULL); //hold
 
     xTaskCreate(&DistanceTask, "medir", 2048, NULL, 5, &task_handle_medir);
-    //xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, &task_handle_OnOff_medir); //borrar tarea? esta controla las teclas, cambiarla por funciones
-                                                                                                    //en el switchactivint
 
     TimerStart(timer_global.timer);
 	
