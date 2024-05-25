@@ -2,16 +2,12 @@
  *
  * @section genDesc General Description
  *
- * Este proyeto es un simulador de un osciloscopio. 
+ * Este proyeto es un simulador de un osciloscopio.
  * Tiene la funcionalidad de converción A/D y D/A
  *
- * <a href="https://drive.google.com/...">Operation Example</a>
  *
  * @section hardConn Hardware Connection
  *
- * |    Peripheral  |   ESP32   	|
- * |:--------------:|:--------------|
- * | 	PIN_X	 	| 	GPIO_X		|
  *
  *
  * @section changelog Changelog
@@ -35,30 +31,26 @@
 #include "uart_mcu.h"
 #include "timer_mcu.h"
 
-
 /*==================[macros and definitions]=================================*/
 /** @def BUFFER_SIZE
- *  @brief 
-*/
+ *  @brief
+ */
 #define BUFFER_SIZE 231
 
 /** @def TIME_PERIOD1
- *  @brief 
-*/
+ *  @brief
+ */
 #define TIME_PERIOD1 2000
 
 /** @def TIME_PERIOD2
- *  @brief 
-*/
+ *  @brief
+ */
 #define TIME_PERIOD2 4000
 
-
+/** @brief Indice para recorrer la señal digital del ECG*/
 uint8_t indice = 0;
 
 /*==================[internal data definition]===============================*/
-
-/** @brief Objeto de tipo TaskHandle_t que se asocia con la tarea*/
-TaskHandle_t main_task_handle = NULL;
 
 /** @brief Señal digital de un ECG*/
 const char ecg[BUFFER_SIZE] = {
@@ -81,86 +73,89 @@ const char ecg[BUFFER_SIZE] = {
     74, 67, 71, 78, 72, 67, 73, 81, 77, 71, 75, 84, 79, 77, 77, 76, 76,
 };
 
-
-
 /*==================[internal functions declaration]=========================*/
 
+/** @brief Objeto de tipo TaskHandle_t que se asocia con la tarea de leer y enviar datos*/
 TaskHandle_t task_handle = NULL;
+
+/** @brief Objeto de tipo TaskHandle_t que se asocia con la tarea de levantar datos transformar con pwm*/
 TaskHandle_t task_handle1 = NULL;
 
-static void Tarea_leer_enviar(void *pvParameter){
+/** @fn Tarea_leer_enviar(void *pvParameter)
+ * @brief Tarea transformar los datos analogicos a digital, recibidos por CH1  y enviarlos por el puerto serie.
+ */
+static void Tarea_leer_enviar(void *pvParameter)
+{
 	uint16_t A_valor;
 	while (1)
 	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  /* La tarea espera en este punto hasta recibir una notificación */
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); /* La tarea espera en este punto hasta recibir una notificación */
 
 		AnalogInputReadSingle(CH1, &A_valor);
-		UartSendString(UART_PC, (char*) UartItoa(A_valor,10));
-		UartSendString(UART_PC, " \n\r");
-		
+		UartSendString(UART_PC, (char *)UartItoa(A_valor, 10));
+		UartSendString(UART_PC, "\r");
 	}
-	
 }
 
-static void Tarea_pwm(void *pvParameter){
+/** @fn Tarea_pwm(void *pvParameter){
+ * @brief Tarea transformar los datos digitales (del ECG) a analogicos.
+ */
+static void Tarea_pwm(void *pvParameter)
+{
 	while (1)
 	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  /* La tarea espera en este punto hasta recibir una notificación */
-		if (indice < sizeof(ecg)){
-			AnalogOutputWrite(ecg[indice]);
-		} else if (indice == sizeof(ecg)){
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); /* La tarea espera en este punto hasta recibir una notificación */
+		AnalogOutputWrite(ecg[indice]);
+		indice++;
+		if (indice >= sizeof(ecg))
+		{
 			indice = 0;
 		}
-		indice++;
 	}
 }
 
 /**
- * @brief Función invocada en la interrupción del timer A
+ * @brief Función invocada en la interrupción del timer A y timer B
  */
-void funcTimer(void* param){
-    vTaskNotifyGiveFromISR(task_handle, pdFALSE);    /* Envía una notificación a la tarea asociada al LED_1 */
+void funcTimer1(void *param)
+{
+	vTaskNotifyGiveFromISR(task_handle, pdFALSE);
+}
+
+void funcTimer2(void *param)
+{
 	vTaskNotifyGiveFromISR(task_handle1, pdFALSE);
 }
 
 /*==================[external functions definition]==========================*/
-void app_main(void){
-    timer_config_t timer_1 = {
-        .timer = TIMER_A,
-        .period = TIME_PERIOD1,
-        .func_p = funcTimer,
-        .param_p = NULL
-    };
+void app_main(void)
+{
+	timer_config_t timer_1 = {
+		.timer = TIMER_A,
+		.period = TIME_PERIOD1,
+		.func_p = funcTimer1,
+		.param_p = NULL};
 
 	timer_config_t timer_2 = {
-        .timer = TIMER_B,
-        .period = TIME_PERIOD2,
-        .func_p = funcTimer,
-        .param_p = NULL
-    };
+		.timer = TIMER_B,
+		.period = TIME_PERIOD2,
+		.func_p = funcTimer2,
+		.param_p = NULL};
 
 	analog_input_config_t analog_input = {
 		.input = CH1,
 		.mode = ADC_SINGLE,
 		.func_p = NULL,
-		.param_p = NULL
-	};
-
-	analog_input_config_t analog_output = {
-		.input = CH0,
-		.mode = ADC_SINGLE,
-		.func_p = NULL,
-		.param_p = NULL
-	};
+		.param_p = NULL};
 
 	serial_config_t serial_global = {
-        .port = UART_PC,
-        .baud_rate = 115200,
-        .func_p = NULL,
-        .param_p = NULL
-    };
+		.port = UART_PC,
+		.baud_rate = 115200,
+		.func_p = NULL,
+		.param_p = NULL};
+		
 	UartInit(&serial_global);
-	
+
 	TimerInit(&timer_1);
 	TimerInit(&timer_2);
 	AnalogInputInit(&analog_input);
@@ -171,6 +166,5 @@ void app_main(void){
 
 	TimerStart(timer_1.timer);
 	TimerStart(timer_2.timer);
-
 }
 /*==================[end of file]============================================*/

@@ -53,7 +53,7 @@
             "path": "projects/proyecto-2-Actividad-4"
         },
         {
-            "path": "projects/proyecto-integrador"
+            "path": "projects/proyecto"
         }
     ],
     "settings": {
@@ -120,7 +120,13 @@
             "*.tcc": "c",
             "fstream": "c",
             "limits": "c",
-            "functional": "c"
+            "functional": "c",
+            "iir_filter.h": "c",
+            "*.txt": "c",
+            "esp_bt.h": "c",
+            "list": "c",
+            "ble_mcu.h": "c",
+            "buzzer.h": "c"
         },
     },
     "tasks": {
