@@ -165,6 +165,6 @@ void app_main(void){
     SwitchesInit();
     xTaskCreate(&LedTask, "medir", 2048, NULL, 5, NULL);
     xTaskCreate(&OnOffTask, "encender y apagar la medicion", 512, NULL, 5, NULL);
-	
+    
 }
 /*==================[end of file]============================================*/

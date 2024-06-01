@@ -38,296 +38,61 @@
 
 /*==================[macros and definitions]=================================*/
 
-#define BUFFER_SIZE 231
+
 
 /** @def TIME_PERIOD1
  *  @brief
  */
-#define TIME_PERIOD1 10000 // Tiempo de muestreo 4[us] milisegundos
-// #define TIME_PERIOD2 2000 //2 milisegundo
+#define PERIODO_MUESTREO 10000 // Tiempo de muestreo 10[ms] milisegundos -> 100[Hz]
 //  1000000us -> 1s
-#define TIME_PERIOD2 20000		   // se usa para el
 #define PERIODO_REFRACTARIO 250000 // VALOR FISIOLOGICO DEL PERIODO REFRACTARIO
-#define TIME_BUZZER 500000
+#define TIME_BUZZER 10000 // (VER DE USAR EL MISMO PERIODO QUE EL MUESTREO)
 
-#define BUZZER GPIO_3
+#define BUZZER GPIO_3 
 
-#define SAMPLE_FREQ 100 // 250Hz -> 4ms
-#define CHUNK 8			// cant de muestras
-uint8_t sonarBuzzer = 0;
-uint8_t indice = 0;
+#define SAMPLE_FREQ 100 // 100Hz -> 10[ms] Para el filtro
+#define CHUNK 8			// cant de muestras para procesar
 
-// para la FC
-uint8_t muestras_en_periodo_refractario = PERIODO_REFRACTARIO / TIME_PERIOD1; //
 
-int16_t UMBRAL = 200; // VER QUE VALOR CONVIENE (FALTA DEFINIR)
-uint8_t FC = 0;
-uint16_t periodo_RR = 0;
-uint16_t valor_actual = 0;
 
 /*==================[internal data definition]===============================*/
-const char ecg[BUFFER_SIZE] = {
-	76,
-	77,
-	78,
-	77,
-	79,
-	86,
-	81,
-	76,
-	84,
-	93,
-	85,
-	80,
-	89,
-	95,
-	89,
-	85,
-	93,
-	98,
-	94,
-	88,
-	98,
-	105,
-	96,
-	91,
-	99,
-	105,
-	101,
-	96,
-	102,
-	106,
-	101,
-	96,
-	100,
-	107,
-	101,
-	94,
-	100,
-	104,
-	100,
-	91,
-	99,
-	103,
-	98,
-	91,
-	96,
-	105,
-	95,
-	88,
-	95,
-	100,
-	94,
-	85,
-	93,
-	99,
-	92,
-	84,
-	91,
-	96,
-	87,
-	80,
-	83,
-	92,
-	86,
-	78,
-	84,
-	89,
-	79,
-	73,
-	81,
-	83,
-	78,
-	70,
-	80,
-	82,
-	79,
-	69,
-	80,
-	82,
-	81,
-	70,
-	75,
-	81,
-	77,
-	74,
-	79,
-	83,
-	82,
-	72,
-	80,
-	87,
-	79,
-	76,
-	85,
-	95,
-	87,
-	81,
-	88,
-	93,
-	88,
-	84,
-	87,
-	94,
-	86,
-	82,
-	85,
-	94,
-	85,
-	82,
-	85,
-	95,
-	86,
-	83,
-	92,
-	99,
-	91,
-	88,
-	94,
-	98,
-	95,
-	90,
-	97,
-	105,
-	104,
-	94,
-	98,
-	114,
-	117,
-	124,
-	144,
-	180,
-	210,
-	236,
-	253,
-	227,
-	171,
-	99,
-	49,
-	34,
-	29,
-	43,
-	69,
-	89,
-	89,
-	90,
-	98,
-	107,
-	104,
-	98,
-	104,
-	110,
-	102,
-	98,
-	103,
-	111,
-	101,
-	94,
-	103,
-	108,
-	102,
-	95,
-	97,
-	106,
-	100,
-	92,
-	101,
-	103,
-	100,
-	94,
-	98,
-	103,
-	96,
-	90,
-	98,
-	103,
-	97,
-	90,
-	99,
-	104,
-	95,
-	90,
-	99,
-	104,
-	100,
-	93,
-	100,
-	106,
-	101,
-	93,
-	101,
-	105,
-	103,
-	96,
-	105,
-	112,
-	105,
-	99,
-	103,
-	108,
-	99,
-	96,
-	102,
-	106,
-	99,
-	90,
-	92,
-	100,
-	87,
-	80,
-	82,
-	88,
-	77,
-	69,
-	75,
-	79,
-	74,
-	67,
-	71,
-	78,
-	72,
-	67,
-	73,
-	81,
-	77,
-	71,
-	75,
-	84,
-	79,
-	77,
-	77,
-	76,
-	76,
-};
 
-TaskHandle_t task_handle = NULL;
-TaskHandle_t task_handle1 = NULL;
-TaskHandle_t task_handle3 = NULL;
+uint8_t sonarBuzzer = 0; //bandera
+uint8_t indice = 0; //para recorrer el vector de ECG digital
 
-static float ecg_filt[CHUNK] = {0}; // arregla para aplicar el filtro
-static float ecg_muestra[CHUNK] = {0};
-float last_valor = 0;
+// para la FC
+uint8_t muestras_en_periodo_refractario = PERIODO_REFRACTARIO / PERIODO_MUESTREO; //
 
-static void Sumilador_ECG(void *pvParameter)
-{
-	while (1)
-	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); /* La tarea espera en este punto hasta recibir una notificación */
-		AnalogOutputWrite(ecg[indice]);
-		indice++;
-		if (indice == BUFFER_SIZE)
-		{
-			indice = 0;
-		}
-	}
-}
+int16_t UMBRAL = 400; // VER QUE VALOR CONVIENE (FALTA DEFINIR) | RECIBIR POR BLUETOOTH
+uint16_t FC = 0;
+uint16_t periodo_RR = 0; 
+uint16_t valor_actual = 0;
+
+TaskHandle_t task_procesar_enviar = NULL;
+TaskHandle_t task_sonar = NULL;
+
+static float ecg_filt[CHUNK] = {0}; // PARA FITLRO
+static float ecg_muestra[CHUNK] = {0}; //PARA FILTRO
+static float vector_fc[16] = {0};
+
+//timer_config_t timer_3;
+
+
+
+/*==================[internal functions declaration]=========================*/
 
 void detectar_ondaR(float p_valor)
 {
-	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario))
+	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario)) //25
 	{
+		
+		FC = 60000000/(periodo_RR*PERIODO_MUESTREO);
+		
 		periodo_RR = 0;
 		sonarBuzzer = 1;
+		BuzzerPlayTone(200, 200);
+		//BuzzerOn();
+		//TimerStart(TIMER_C);
 	}
 }
 
@@ -335,15 +100,16 @@ static void sonar(void *pvParameter)
 {
 	while (1)
 	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-		// if (sonarBuzzer == 1){
-		BuzzerPlayTone(600, 200);
-		// sonarBuzzer = 0;
-		//}
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //VER SI LO PUEDO SOLUCIONAR USANDO EL MISMO TIEMPO QUE EL PERIODO_MUESTREO
+		if (sonarBuzzer == 1){
+			BuzzerPlayTone(600, 200); 
+			sonarBuzzer = 0;
+		}
+		
 	}
 }
 
-static void Tarea_leer_enviar(void *pvParameter)
+static void procesar_y_enviar_ECG(void *pvParameter)
 {
 	uint16_t valor = 0;
 	char msg[128];
@@ -373,59 +139,61 @@ static void Tarea_leer_enviar(void *pvParameter)
 				// UartSendString(UART_PC, (char *)UartItoa(ecg_filt[j], 10));
 				// UartSendString(UART_PC, "\r");
 			}
-
+			
 			BleSendString(msg);
 			i = 0;
 		}
 	}
 }
 
-/*
-void calcularFC(float *signal, uint8_t signal_length){ //hacer de otra forma, sin diff, solo con valor y umbral
-	if (periodo_refractario == 0){
-		diff = signal[0] - last_valor;
-		//diff = diff*diff;
-		if (diff < UMBRAL){
-			FC = 60000/(periodo_RR*TIME_PERIOD1);
-			periodo_RR = 0;
-			periodo_refractario = 250/TIME_PERIOD1;
-		}
-
-		for(uint8_t i=1; i<signal_length; i++){
-			diff = signal[i] - signal[i-1];
-			//diff = diff*diff;
-			if (diff < UMBRAL && periodo_refractario == 0){
-				FC = 60000/(periodo_RR*TIME_PERIOD1);
-				periodo_RR = 0;
-				periodo_refractario = 250/TIME_PERIOD1;
-			}
-		}
-
-	} else {
-		periodo_refractario--;
+static void informar(void *pvParameter){
+	//enviar la FC (con caracter *F)
+	char msg_fc[30];
+	while (1){
+		strcpy(msg_fc, "");
+		sprintf(msg_fc, "F%u\n", FC);
+		FC=0;
+		BleSendString(msg_fc);
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
-}*/
+	
+}
+
+
+void funcTimerBUZZER(void *param)
+{
+	vTaskNotifyGiveFromISR(task_sonar, pdFALSE);
+
+}
 
 /**
  * @brief Función invocada en la interrupción del timer A
  */
 void funcTimer1(void *param)
 {
-	vTaskNotifyGiveFromISR(task_handle, pdFALSE); /* Envía una notificación a la tarea asociada al LED_1 */
-												  // vTaskNotifyGiveFromISR(task_handle1, pdFALSE);
+	vTaskNotifyGiveFromISR(task_procesar_enviar, pdFALSE);
+	//vTaskNotifyGiveFromISR(task_sonar, pdFALSE);
 }
 
-void funcTimer2(void *param)
-{
-	vTaskNotifyGiveFromISR(task_handle1, pdFALSE);
+void read_data(uint8_t * data, uint8_t length){
+	uint8_t i = 1;
+	static uint16_t umbral_aux = 0;
+	char msg[60];
+	if(data[0] == 'A'){
+		strcpy(msg, "");
+		umbral_aux = 0;
+		while(data[i] != 'B'){
+			umbral_aux = umbral_aux * 10;
+			umbral_aux = umbral_aux + (data[i] - '0');
+			i++;
+		}
+	}
+	UMBRAL = umbral_aux;
+	sprintf(msg,"U%u\n", umbral_aux);
+	printf("%u\n",umbral_aux);
+	BleSendString(msg);
 }
 
-void funcTimerBUZZER(void *param)
-{
-	vTaskNotifyGiveFromISR(task_handle3, pdFALSE);
-}
-
-/*==================[internal functions declaration]=========================*/
 
 /*==================[external functions definition]==========================*/
 void app_main(void)
@@ -433,41 +201,42 @@ void app_main(void)
 
 	timer_config_t timer_1 = {
 		.timer = TIMER_A,
-		.period = TIME_PERIOD1, // sacar *chunk
+		.period = PERIODO_MUESTREO,
 		.func_p = funcTimer1,
-		.param_p = NULL};
+		.param_p = NULL
+	};
 
-	timer_config_t timer_2 = {
-		.timer = TIMER_B,
-		.period = TIME_PERIOD2, // poner TIME_PERIOD2
-		.func_p = funcTimer2,
-		.param_p = NULL};
 
 	timer_config_t timer_3 = {
 		.timer = TIMER_C,
 		.period = TIME_BUZZER,
 		.func_p = funcTimerBUZZER,
-		.param_p = NULL};
+		.param_p = NULL
+	};
 
 	analog_input_config_t analog_input = {
 		.input = CH1,
 		.mode = ADC_SINGLE,
 		.func_p = NULL,
-		.param_p = NULL};
+		.param_p = NULL
+	};
 
 	serial_config_t serial_global = {
 		.port = UART_PC,
 		.baud_rate = 115200,
 		.func_p = NULL,
-		.param_p = NULL};
+		.param_p = NULL
+		};
+
+	
 
 	ble_config_t ble_configuration = {
 		"ESP_ECG",
-		NULL};
+		read_data
+		};
 
 	UartInit(&serial_global);
 	TimerInit(&timer_1);
-	TimerInit(&timer_2);
 	TimerInit(&timer_3);
 	AnalogInputInit(&analog_input);
 	AnalogOutputInit();
@@ -478,12 +247,12 @@ void app_main(void)
 
 	BuzzerInit(BUZZER);
 
-	xTaskCreate(&Tarea_leer_enviar, "leer y enviar datos", 4096, NULL, 5, &task_handle);
-	// xTaskCreate(&Tarea_sonido, "hacer sonar el buzzer", 1024, NULL, 5, &task_handle1); //VER SI BORRAR O DEJAR
-	xTaskCreate(&Sumilador_ECG, "Envía la señal ECG analógica por CH0", 4096, NULL, 5, &task_handle1);
-	xTaskCreate(&sonar, "sonar Buzzer", 2048, NULL, 5, &task_handle3);
+	int tamanio = 1024;
+
+	xTaskCreate(&procesar_y_enviar_ECG, "lee, aplica filtros y envia datos", (tamanio*4), NULL, 5, &task_procesar_enviar);
+	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", (tamanio*2), NULL, 5, &task_sonar);//NO SÉ SI VA POR CUESTION DE TIEMPO
+	xTaskCreate(&informar, "informa la frecuancia cardiaca", (tamanio), NULL, 5, NULL);
 	TimerStart(timer_1.timer);
-	TimerStart(timer_2.timer); // sumilador
 	TimerStart(timer_3.timer);
 }
 /*==================[end of file]============================================*/
