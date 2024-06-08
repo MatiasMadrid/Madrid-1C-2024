@@ -46,7 +46,7 @@
 #define PERIODO_MUESTREO 10000 // Tiempo de muestreo 10[ms] milisegundos -> 100[Hz]
 //  1000000us -> 1s
 #define PERIODO_REFRACTARIO 250000 // VALOR FISIOLOGICO DEL PERIODO REFRACTARIO
-#define TIME_BUZZER 10000 // (VER DE USAR EL MISMO PERIODO QUE EL MUESTREO)
+#define TIME_BUZZER 20000 // (VER DE USAR EL MISMO PERIODO QUE EL MUESTREO)
 
 #define BUZZER GPIO_3 
 
@@ -73,26 +73,19 @@ TaskHandle_t task_sonar = NULL;
 
 static float ecg_filt[CHUNK] = {0}; // PARA FITLRO
 static float ecg_muestra[CHUNK] = {0}; //PARA FILTRO
-static float vector_fc[16] = {0};
-
-//timer_config_t timer_3;
-
+//static float vector_fc[16] = {0};
 
 
 /*==================[internal functions declaration]=========================*/
 
 void detectar_ondaR(float p_valor)
 {
-	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario)) //25
+	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario))
 	{
-		
 		FC = 60000000/(periodo_RR*PERIODO_MUESTREO);
-		
 		periodo_RR = 0;
 		sonarBuzzer = 1;
-		BuzzerPlayTone(200, 200);
-		//BuzzerOn();
-		//TimerStart(TIMER_C);
+		//BuzzerPlayTone(200, 200);
 	}
 }
 
@@ -102,10 +95,9 @@ static void sonar(void *pvParameter)
 	{
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //VER SI LO PUEDO SOLUCIONAR USANDO EL MISMO TIEMPO QUE EL PERIODO_MUESTREO
 		if (sonarBuzzer == 1){
-			BuzzerPlayTone(600, 200); 
+			BuzzerPlayTone(200, 200); 
 			sonarBuzzer = 0;
 		}
-		
 	}
 }
 
@@ -119,8 +111,6 @@ static void procesar_y_enviar_ECG(void *pvParameter)
 	{
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); /* La tarea espera en este punto hasta recibir una notificación */
 		AnalogInputReadSingle(CH1, &valor);
-		// UartSendString(UART_PC, (char *)UartItoa(ecg_muestra[j], 10));
-		// UartSendString(UART_PC, "\r");
 		ecg_muestra[i] = valor;
 		valor_actual = valor;
 		periodo_RR++;
@@ -130,16 +120,15 @@ static void procesar_y_enviar_ECG(void *pvParameter)
 		{
 			HiPassFilter(&ecg_muestra[0], ecg_filt, CHUNK);
 			LowPassFilter(ecg_filt, ecg_filt, CHUNK);
-			strcpy(msg, ""); // msg[0] = 0;
+			strcpy(msg, "");
+
 			for (uint8_t j = 0; j < CHUNK; j++)
 			{
 				detectar_ondaR(ecg_filt[j]);
 				sprintf(msg_chunk, "*G%.2f*", ecg_filt[j]);
 				strcat(msg, msg_chunk);
-				// UartSendString(UART_PC, (char *)UartItoa(ecg_filt[j], 10));
-				// UartSendString(UART_PC, "\r");
 			}
-			
+
 			BleSendString(msg);
 			i = 0;
 		}
@@ -163,7 +152,6 @@ static void informar(void *pvParameter){
 void funcTimerBUZZER(void *param)
 {
 	vTaskNotifyGiveFromISR(task_sonar, pdFALSE);
-
 }
 
 /**
@@ -207,8 +195,8 @@ void app_main(void)
 	};
 
 
-	timer_config_t timer_3 = {
-		.timer = TIMER_C,
+	timer_config_t timer_2 = {
+		.timer = TIMER_B,
 		.period = TIME_BUZZER,
 		.func_p = funcTimerBUZZER,
 		.param_p = NULL
@@ -235,9 +223,10 @@ void app_main(void)
 		read_data
 		};
 
+
 	UartInit(&serial_global);
 	TimerInit(&timer_1);
-	TimerInit(&timer_3);
+	TimerInit(&timer_2);
 	AnalogInputInit(&analog_input);
 	AnalogOutputInit();
 	BleInit(&ble_configuration);
@@ -247,12 +236,10 @@ void app_main(void)
 
 	BuzzerInit(BUZZER);
 
-	int tamanio = 1024;
-
-	xTaskCreate(&procesar_y_enviar_ECG, "lee, aplica filtros y envia datos", (tamanio*4), NULL, 5, &task_procesar_enviar);
-	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", (tamanio*2), NULL, 5, &task_sonar);//NO SÉ SI VA POR CUESTION DE TIEMPO
-	xTaskCreate(&informar, "informa la frecuancia cardiaca", (tamanio), NULL, 5, NULL);
+	xTaskCreate(&procesar_y_enviar_ECG, "lee, aplica filtros y envia datos", 4096, NULL, 5, &task_procesar_enviar);
+	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", 4096, NULL, 5, &task_sonar);//NO SÉ SI VA POR CUESTION DE TIEMPO
+	xTaskCreate(&informar, "informa la frecuancia cardiaca", 4096, NULL, 5, NULL);
 	TimerStart(timer_1.timer);
-	TimerStart(timer_3.timer);
+	TimerStart(timer_2.timer);
 }
 /*==================[end of file]============================================*/
