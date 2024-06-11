@@ -8,34 +8,14 @@
  *
  * @section hardConn Hardware Connection
  *
- * |    sensor_humedad  |   ESP32   	|
- * |:-----------:|:--------------|
- * | 	5v	 	 | 	5v		|
- * | 	data	 | 	GPIO1	|
- * | 	GND	 	 | 	GND		|
+ * |    periferico		 |   ESP32   	|
+ * |:-------------------:|:--------------|
+ * | 	sensor de humedad	 |  GPIO1		|
+ * | 	sensor pH		 	 | 	GPIO2		|
+ * | 	bomba de agua	 	 | 	GPIO10		|
+ * |    bomba acida 		 |  GPIO11	 	|
+ * | 	bomba basica 		 |  GPIO12 		|
  * 
- * |    sensor_Ph |   ESP32      |
- * |:------------:|:-------------|
- * | 	5v	 	  | 	5v		 |
- * | 	data	  | 	GPIO2	 |
- * | 	GND	 	  | 	GND		 |
- * 
-* |    bomba agua |   ESP32     |
- * |:------- ----:|:------------|
- * | 	ON	 	  |  	GPIO10	|
- * 
- * |    bomba agua |   ESP32    |
- * |:-------------:|:-----------|
- * | 	ON	 	   |  	GPIO10	|
- * 
- * |    bomba acida |   ESP32   |
- * |:--------------:|:----------|
- * | 	ON/OFF      |  	GPIO11	|
- * 
- * |    bomba basica |   ESP32      |
- * |:---------------:|:-------------|
- * | 	ON/OFF	     |  	GPIO12	|
- *
  *
  * @section changelog Changelog
  *
