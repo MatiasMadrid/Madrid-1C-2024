@@ -126,8 +126,6 @@ static void DistanceTask(void *pvParameter){
             LedsOffAll();
             LcdItsE0803Off();
         }
-
-
     }
 }
 

@@ -209,22 +209,11 @@ void app_main(void)
 		.param_p = NULL
 	};
 
-	serial_config_t serial_global = {
-		.port = UART_PC,
-		.baud_rate = 115200,
-		.func_p = NULL,
-		.param_p = NULL
-		};
-
-	
-
 	ble_config_t ble_configuration = {
 		"ESP_ECG",
 		read_data
-		};
+	};
 
-
-	UartInit(&serial_global);
 	TimerInit(&timer_1);
 	TimerInit(&timer_2);
 	AnalogInputInit(&analog_input);
