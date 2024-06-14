@@ -40,12 +40,10 @@
 
 /*==================[macros and definitions]=================================*/
 
-
-
 /** @def PERIODO_MUESTREO
  *  @brief Tiempo (us) que establece el periodo de muestreo de la señal ECG
  */
-#define PERIODO_MUESTREO 10000 
+#define PERIODO_MUESTREO 10000
 
 /** @def PERIODO_REFRACTARIO
  *  @brief Tiempo (us) de la duración del periodo refractario fisiológico
@@ -53,14 +51,14 @@
 #define PERIODO_REFRACTARIO 250000
 
 /** @def TIME_BUZZER
- *  @brief Tiempo (us) que establece el tiempo 
+ *  @brief Tiempo (us) que establece el tiempo
  */
 #define TIME_BUZZER 20000
 
 /** @def BUZZER
  *  @brief Se define la variable BUZZER al GPIO3 donde estará conectado el buzzer
  */
-#define BUZZER GPIO_3 
+#define BUZZER GPIO_3
 
 /** @def SAMPLE_FREQ
  *  @brief Se define la variable SAMPLE_FREQ la frecuencia del periodo de muestreo para aplicar el filtro
@@ -72,12 +70,10 @@
  */
 #define CHUNK 8
 
-
-
 /*==================[internal data definition]===============================*/
 
 /** @brief sonarBuzzer Badera que se utiliza para verificar si se debe activar el buzzer */
-uint8_t sonarBuzzer = 0; 
+uint8_t sonarBuzzer = 0;
 
 /** @brief muestras_en_periodo_refractario Cantiad de muestras que abarca la duración del perido refractario */
 uint8_t muestras_en_periodo_refractario = PERIODO_REFRACTARIO / PERIODO_MUESTREO;
@@ -89,7 +85,7 @@ int16_t UMBRAL = 400; // VER QUE VALOR CONVIENE (FALTA DEFINIR) | RECIBIR POR BL
 uint16_t FC = 0;
 
 /** @brief periodo_RR Variable que guarda cantidad de muestras entre dos picos R*/
-uint16_t periodo_RR = 0; 
+uint16_t periodo_RR = 0;
 
 /** @brief valor_actual Variable que guarda el valor actual muestreado */
 uint16_t valor_actual = 0;
@@ -101,12 +97,10 @@ TaskHandle_t task_procesar_enviar = NULL;
 TaskHandle_t task_sonar = NULL;
 
 /** @brief ecg_filt[CHUNK] Vector que guarda los datos filtrados del ECG */
-static float ecg_filt[CHUNK] = {0}; 
+static float ecg_filt[CHUNK] = {0};
 
 /** @brief ecg_filt[CHUNK] Vector que guarda los datos sin filtrar del ECG */
-static float ecg_muestra[CHUNK] = {0}; 
-
-
+static float ecg_muestra[CHUNK] = {0};
 
 /*==================[internal functions declaration]=========================*/
 
@@ -118,7 +112,7 @@ void detectar_ondaR(float p_valor)
 {
 	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario))
 	{
-		FC = 60000000/(periodo_RR*PERIODO_MUESTREO);
+		FC = 60000000 / (periodo_RR * PERIODO_MUESTREO);
 		periodo_RR = 0;
 		sonarBuzzer = 1;
 	}
@@ -131,9 +125,10 @@ static void sonar(void *pvParameter)
 {
 	while (1)
 	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //VER SI LO PUEDO SOLUCIONAR USANDO EL MISMO TIEMPO QUE EL PERIODO_MUESTREO
-		if (sonarBuzzer == 1){
-			BuzzerPlayTone(200, 150); 
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // VER SI LO PUEDO SOLUCIONAR USANDO EL MISMO TIEMPO QUE EL PERIODO_MUESTREO
+		if (sonarBuzzer == 1)
+		{
+			BuzzerPlayTone(200, 150);
 			sonarBuzzer = 0;
 		}
 	}
@@ -182,10 +177,11 @@ static void procesar_y_enviar_ECG(void *pvParameter)
 static void informar(void *pvParameter)
 {
 	char msg_fc[30];
-	while (1){
+	while (1)
+	{
 		strcpy(msg_fc, "");
 		sprintf(msg_fc, "F%u\n", FC);
-		FC=0;
+		FC = 0;
 		BleSendString(msg_fc);
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
@@ -211,25 +207,27 @@ void funcTimer1(void *param)
  * @brief Función que convierte el dato recibido por Bluetooth, y se lo asigna al umbral para la deteccion de las ondas R
  * @param data dato recibido por Bluetooth
  */
-void read_data(uint8_t * data, uint8_t length){
+void read_data(uint8_t *data, uint8_t length)
+{
 	uint8_t i = 1;
 	static uint16_t umbral_aux = 0;
 	char msg[60];
-	if(data[0] == 'A'){
+	if (data[0] == 'A')
+	{
 		strcpy(msg, "");
 		umbral_aux = 0;
-		while(data[i] != 'B'){
+		while (data[i] != 'B')
+		{
 			umbral_aux = umbral_aux * 10;
 			umbral_aux = umbral_aux + (data[i] - '0');
 			i++;
 		}
 	}
 	UMBRAL = umbral_aux;
-	sprintf(msg,"U%u\n", umbral_aux);
-	printf("%u\n",umbral_aux);
+	sprintf(msg, "U%u\n", umbral_aux);
+	printf("%u\n", umbral_aux);
 	BleSendString(msg);
 }
-
 
 /*==================[external functions definition]==========================*/
 void app_main(void)
@@ -239,28 +237,23 @@ void app_main(void)
 		.timer = TIMER_A,
 		.period = PERIODO_MUESTREO,
 		.func_p = funcTimer1,
-		.param_p = NULL
-	};
-
+		.param_p = NULL};
 
 	timer_config_t timer_2 = {
 		.timer = TIMER_B,
 		.period = TIME_BUZZER,
 		.func_p = funcTimerBUZZER,
-		.param_p = NULL
-	};
+		.param_p = NULL};
 
 	analog_input_config_t analog_input = {
 		.input = CH1,
 		.mode = ADC_SINGLE,
 		.func_p = NULL,
-		.param_p = NULL
-	};
+		.param_p = NULL};
 
 	ble_config_t ble_configuration = {
 		"ESP_ECG",
-		read_data
-	};
+		read_data};
 
 	TimerInit(&timer_1);
 	TimerInit(&timer_2);
@@ -274,7 +267,7 @@ void app_main(void)
 	BuzzerInit(BUZZER);
 
 	xTaskCreate(&procesar_y_enviar_ECG, "lee, aplica filtros y envia datos", 4096, NULL, 5, &task_procesar_enviar);
-	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", 4096, NULL, 5, &task_sonar);//NO SÉ SI VA POR CUESTION DE TIEMPO
+	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", 4096, NULL, 5, &task_sonar); // NO SÉ SI VA POR CUESTION DE TIEMPO
 	xTaskCreate(&informar, "informa la frecuancia cardiaca", 4096, NULL, 5, NULL);
 	TimerStart(timer_1.timer);
 	TimerStart(timer_2.timer);
