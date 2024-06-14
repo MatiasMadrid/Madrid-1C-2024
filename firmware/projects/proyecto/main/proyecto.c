@@ -73,7 +73,8 @@ TaskHandle_t task_sonar = NULL;
 
 static float ecg_filt[CHUNK] = {0}; // PARA FITLRO
 static float ecg_muestra[CHUNK] = {0}; //PARA FILTRO
-//static float vector_fc[16] = {0};
+uint8_t vector_fc[10] = {0}; //NUEVO
+
 
 
 /*==================[internal functions declaration]=========================*/
@@ -82,7 +83,20 @@ void detectar_ondaR(float p_valor)
 {
 	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario))
 	{
+    	uint8_t arreglo_aux [5] = {0, 0, 0, 0, 0};
+    	for (int i = 0; i < 5-1; i++) {
+    	    if (i != (5-1)){
+   	         arreglo_aux[i+1] = vector_fc[i];
+   	     	}
+   	 	}
+		vector_fc = arreglo_aux;
 		FC = 60000000/(periodo_RR*PERIODO_MUESTREO);
+		vector_fc[0] = FC;
+
+		for (int i = 0; i < 5-1; i++){
+			FC += vector_fc[i];
+		}
+		FC = FC/5;
 		periodo_RR = 0;
 		sonarBuzzer = 1;
 		//BuzzerPlayTone(200, 200);
@@ -95,7 +109,7 @@ static void sonar(void *pvParameter)
 	{
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //VER SI LO PUEDO SOLUCIONAR USANDO EL MISMO TIEMPO QUE EL PERIODO_MUESTREO
 		if (sonarBuzzer == 1){
-			BuzzerPlayTone(200, 200); 
+			BuzzerPlayTone(200, 150); 
 			sonarBuzzer = 0;
 		}
 	}
