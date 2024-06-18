@@ -37,6 +37,7 @@
 #include "buzzer.h"
 #include "ble_mcu.h"
 #include "iir_filter.h"
+#include "led.h" 
 
 /*==================[macros and definitions]=================================*/
 
@@ -51,9 +52,14 @@
 #define PERIODO_REFRACTARIO 250000
 
 /** @def TIME_BUZZER
- *  @brief Tiempo (us) que establece el tiempo
+ *  @brief Tiempo (us) de la tarea del buzzer (se recomienda que sea mayor que la duración del sonido)
  */
 #define TIME_BUZZER 20000
+
+/** @def PERIODO_LEDS
+ *  @brief Tiempo (ms) para prender/apagar leds
+ */
+#define PERIODO_LEDS 1000
 
 /** @def BUZZER
  *  @brief Se define la variable BUZZER al GPIO3 donde estará conectado el buzzer
@@ -78,8 +84,14 @@ uint8_t sonarBuzzer = 0;
 /** @brief muestras_en_periodo_refractario Cantiad de muestras que abarca la duración del perido refractario */
 uint8_t muestras_en_periodo_refractario = PERIODO_REFRACTARIO / PERIODO_MUESTREO;
 
-/** @brief UMRAL Cantiad de muestras que abarca la duración del perido refractario */
-int16_t UMBRAL = 400; // VER QUE VALOR CONVIENE (FALTA DEFINIR) | RECIBIR POR BLUETOOTH
+/** @brief UMRAL Valor umbral que sirve para detectar la onda R */
+int16_t UMBRAL_ONDA_R = 400;
+
+/** @brief UMBRAL_INF_FC Valor umbral inferior para diferencial valores normales y anormales de la FC */
+int16_t UMBRAL_INF_FC = 60;
+
+/** @brief UMBRAL_SUP_FC Valor umbral superior para diferencial valores normales y anormales de la FC */
+int16_t UMBRAL_SUP_FC = 80;
 
 /** @brief FC Variable que guarda la frecuancia cardiaca momentanea */
 uint16_t FC = 0;
@@ -110,8 +122,9 @@ static float ecg_muestra[CHUNK] = {0};
  */
 void detectar_ondaR(float p_valor)
 {
-	if ((p_valor > UMBRAL) && (periodo_RR > muestras_en_periodo_refractario))
+	if ((p_valor > UMBRAL_ONDA_R) && (periodo_RR > muestras_en_periodo_refractario))
 	{
+		FC = 0;
 		FC = 60000000 / (periodo_RR * PERIODO_MUESTREO);
 		periodo_RR = 0;
 		sonarBuzzer = 1;
@@ -177,13 +190,44 @@ static void procesar_y_enviar_ECG(void *pvParameter)
 static void informar(void *pvParameter)
 {
 	char msg_fc[30];
+
 	while (1)
 	{
 		strcpy(msg_fc, "");
 		sprintf(msg_fc, "F%u\n", FC);
-		FC = 0;
+		//FC = 0;
 		BleSendString(msg_fc);
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
+	}
+}
+
+/** @fn alarma(void *pvParameter)
+ * @brief Tarea que modifica el estado de los leds según el valor de la frecuencia cardíaca 
+ */
+static void alarma(void *pvParameter)
+{
+
+	while (1)
+	{
+		
+		if (FC < UMBRAL_INF_FC)
+		{
+			LedOff(LED_1);
+			LedToggle(LED_3);
+
+		} else if (FC > UMBRAL_INF_FC && FC < UMBRAL_SUP_FC)
+		{
+			LedOff(LED_3);
+			LedOn(LED_1);
+
+		} else if (FC > UMBRAL_SUP_FC)
+		{
+			LedOff(LED_1);
+			LedToggle(LED_3);
+
+		}
+
+		vTaskDelay(PERIODO_LEDS / portTICK_PERIOD_MS);
 	}
 }
 
@@ -198,7 +242,7 @@ void funcTimerBUZZER(void *param)
 /**
  * @brief Función invocada en la interrupción del la tarea procesar y enviar
  */
-void funcTimer1(void *param)
+void funcTimerMuestreo(void *param)
 {
 	vTaskNotifyGiveFromISR(task_procesar_enviar, pdFALSE);
 }
@@ -210,7 +254,7 @@ void funcTimer1(void *param)
 void read_data(uint8_t *data, uint8_t length)
 {
 	uint8_t i = 1;
-	static uint16_t umbral_aux = 0;
+	uint16_t umbral_aux = 0;
 	char msg[60];
 	if (data[0] == 'A')
 	{
@@ -222,10 +266,41 @@ void read_data(uint8_t *data, uint8_t length)
 			umbral_aux = umbral_aux + (data[i] - '0');
 			i++;
 		}
+		UMBRAL_ONDA_R = umbral_aux;
+		sprintf(msg, "U%u\n", umbral_aux);
+		printf("%u\n", umbral_aux);
 	}
-	UMBRAL = umbral_aux;
-	sprintf(msg, "U%u\n", umbral_aux);
-	printf("%u\n", umbral_aux);
+
+	if (data[0] == 'C')
+	{
+		strcpy(msg, "");
+		umbral_aux = 0;
+		while (data[i] != 'D')
+		{
+			umbral_aux = umbral_aux * 10;
+			umbral_aux = umbral_aux + (data[i] - '0');
+			i++;
+		}
+		UMBRAL_INF_FC = umbral_aux;
+		sprintf(msg, "V%u\n", umbral_aux);
+		printf("%u\n", umbral_aux);
+	}
+
+	if (data[0] == 'E')
+	{
+		strcpy(msg, "");
+		umbral_aux = 0;
+		while (data[i] != 'F')
+		{
+			umbral_aux = umbral_aux * 10;
+			umbral_aux = umbral_aux + (data[i] - '0');
+			i++;
+		}
+		UMBRAL_SUP_FC = umbral_aux;
+		sprintf(msg, "W%u\n", umbral_aux);
+		printf("%u\n", umbral_aux);
+	}
+
 	BleSendString(msg);
 }
 
@@ -233,13 +308,13 @@ void read_data(uint8_t *data, uint8_t length)
 void app_main(void)
 {
 
-	timer_config_t timer_1 = {
+	timer_config_t timer_muestreo = {
 		.timer = TIMER_A,
 		.period = PERIODO_MUESTREO,
-		.func_p = funcTimer1,
+		.func_p = funcTimerMuestreo,
 		.param_p = NULL};
 
-	timer_config_t timer_2 = {
+	timer_config_t timer_buzzer = {
 		.timer = TIMER_B,
 		.period = TIME_BUZZER,
 		.func_p = funcTimerBUZZER,
@@ -255,21 +330,27 @@ void app_main(void)
 		"ESP_ECG",
 		read_data};
 
-	TimerInit(&timer_1);
-	TimerInit(&timer_2);
+	//Se inicializan los perifericos
+	LedsInit();
+	BuzzerInit(BUZZER);
+	BleInit(&ble_configuration);
+	TimerInit(&timer_muestreo);
+	TimerInit(&timer_buzzer);
 	AnalogInputInit(&analog_input);
 	AnalogOutputInit();
-	BleInit(&ble_configuration);
 
+	//Se inician los filtros
 	LowPassInit(SAMPLE_FREQ, 45, ORDER_4);
 	HiPassInit(SAMPLE_FREQ, 1, ORDER_4);
 
-	BuzzerInit(BUZZER);
-
+	//Se crean las tareas
 	xTaskCreate(&procesar_y_enviar_ECG, "lee, aplica filtros y envia datos", 4096, NULL, 5, &task_procesar_enviar);
-	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", 4096, NULL, 5, &task_sonar); // NO SÉ SI VA POR CUESTION DE TIEMPO
+	xTaskCreate(&sonar, "hace sonar el Buzzer en cada onda R", 4096, NULL, 5, &task_sonar);
 	xTaskCreate(&informar, "informa la frecuancia cardiaca", 4096, NULL, 5, NULL);
-	TimerStart(timer_1.timer);
-	TimerStart(timer_2.timer);
+	xTaskCreate(&alarma, "alarma de un estado anormal a travez de los leds", 4096, NULL, 5, NULL);
+
+	//Se arrancan los timers
+	TimerStart(timer_muestreo.timer);
+	TimerStart(timer_buzzer.timer);
 }
 /*==================[end of file]============================================*/

@@ -1,8 +1,8 @@
 var searchData=
 [
   ['gain_0',['GAIN',['../hx711_8c.html#a97ebc8630db48de37f04b63467584ff0',1,'hx711.c']]],
-  ['gamma_5fset_1',['gamma_set',['../ili9341_8c.html#a56f6a4cad6b1411383f78e0777d5a077',1,'ili9341.c']]],
-  ['gamma_5fset_2',['GAMMA_SET',['../ili9341_8c.html#a7f0a97455f8ede6150b6b2c078a90f10',1,'ili9341.c']]],
+  ['gamma_5fset_1',['GAMMA_SET',['../ili9341_8c.html#a7f0a97455f8ede6150b6b2c078a90f10',1,'ili9341.c']]],
+  ['gamma_5fset_2',['gamma_set',['../ili9341_8c.html#a56f6a4cad6b1411383f78e0777d5a077',1,'ili9341.c']]],
   ['gatts_5fcb_3',['gatts_cb',['../structgatts__profile__inst.html#a28b75011466d4c802e22649234b71cad',1,'gatts_profile_inst']]],
   ['gatts_5fif_4',['gatts_if',['../structgatts__profile__inst.html#a64b71c3b06d5f84b1a010f794f64b8c1',1,'gatts_profile_inst']]],
   ['gatts_5fprofile_5finst_5',['gatts_profile_inst',['../structgatts__profile__inst.html',1,'']]],

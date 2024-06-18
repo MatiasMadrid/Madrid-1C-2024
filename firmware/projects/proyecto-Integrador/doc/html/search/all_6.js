@@ -26,9 +26,9 @@ var searchData=
   ['font_5ft_23',['Font_t',['../struct_font__t.html',1,'']]],
   ['fonts_2ec_24',['fonts.c',['../fonts_8c.html',1,'']]],
   ['fonts_2eh_25',['fonts.h',['../fonts_8h.html',1,'']]],
-  ['frame_5fctrl_26',['frame_ctrl',['../ili9341_8c.html#aa3d2f2e1764e68edcf0585da630a8739',1,'ili9341.c']]],
-  ['frame_5fctrl_27',['FRAME_CTRL',['../ili9341_8c.html#a7f2398c30b4b925af593fae3bb4168d0',1,'ili9341.c']]],
+  ['frame_5fctrl_26',['FRAME_CTRL',['../ili9341_8c.html#a7f2398c30b4b925af593fae3bb4168d0',1,'ili9341.c']]],
+  ['frame_5fctrl_27',['frame_ctrl',['../ili9341_8c.html#aa3d2f2e1764e68edcf0585da630a8739',1,'ili9341.c']]],
   ['func_5fp_28',['func_p',['../structanalog__input__config__t.html#a672985730d2c0cf9105559adc9759a3a',1,'analog_input_config_t::func_p'],['../structble__config__t.html#a331819affab0b6948eb77bb32a9c8a63',1,'ble_config_t::func_p'],['../structspi__mcu__config__t.html#a672985730d2c0cf9105559adc9759a3a',1,'spi_mcu_config_t::func_p'],['../structtimer__config__t.html#a672985730d2c0cf9105559adc9759a3a',1,'timer_config_t::func_p'],['../structserial__config__t.html#a672985730d2c0cf9105559adc9759a3a',1,'serial_config_t::func_p']]],
-  ['functimer1_29',['funcTimer1',['../proyecto-_integrador_8c.html#a90258c861dd96974dc0dbac15cc5142f',1,'proyecto-Integrador.c']]],
-  ['functimerbuzzer_30',['funcTimerBUZZER',['../proyecto-_integrador_8c.html#aca45ac3490312d20636db14bf276a5dc',1,'proyecto-Integrador.c']]]
+  ['functimerbuzzer_29',['funcTimerBUZZER',['../proyecto-_integrador_8c.html#aca45ac3490312d20636db14bf276a5dc',1,'proyecto-Integrador.c']]],
+  ['functimermuestreo_30',['funcTimerMuestreo',['../proyecto-_integrador_8c.html#a85f01344f61eb446ab8922bf3feaf2e8',1,'proyecto-Integrador.c']]]
 ];

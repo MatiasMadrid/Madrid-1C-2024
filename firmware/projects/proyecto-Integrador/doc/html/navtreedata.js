@@ -24,8 +24,10 @@
 */
 var NAVTREE =
 [
-  [ "Ejemplo 0 Blinking", "index.html", [
-    [ "Proyecto Integrador", "index.html", "index" ],
+  [ "Proyecto Integrador", "index.html", [
+    [ "General Description", "index.html#genDesc", null ],
+    [ "Hardware Connection", "index.html#hardConn", null ],
+    [ "Changelog", "index.html#changelog", null ],
     [ "Template", "md__c_1_2_repositorios_2_madrid-1_c-2024_2firmware_2projects_2proyecto-_integrador_2_r_e_a_d_m_e.html", null ],
     [ "Topics", "topics.html", "topics" ],
     [ "Estructuras de datos", "annotated.html", [
@@ -66,7 +68,7 @@ var NAVTREEINDEX =
 "group___m_p_u6050.html#ga795c81a32a12a232e00f401ef4c57ea2",
 "group___m_p_u6050.html#gaefda60825aa631ed7837cf33a134e3f7",
 "ili9341_8c.html#ab702106cf3b3e96750b6845ded4e0299",
-"uart__mcu_8c.html#ac5a136fed9300f073616af50ba577b6e"
+"uart__mcu_8c.html#a9ab33647617098646990fe263600b650"
 ];
 
 var SYNCONMSG = 'pulsar para deshabilitar sincronización';

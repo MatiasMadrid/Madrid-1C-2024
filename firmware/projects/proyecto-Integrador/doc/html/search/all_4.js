@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['dac_0',['DAC',['../group___analog___i_o.html#ga4aa2a4ab86ce00c23035e5cee2e7fc7e',1,'analog_io_mcu.h']]],
-  ['dac_1',['dac',['../analog__io__mcu_8c.html#a908fcff7a8381fbd4b39b2cc1a76104f',1,'analog_io_mcu.c']]],
+  ['dac_0',['dac',['../analog__io__mcu_8c.html#a908fcff7a8381fbd4b39b2cc1a76104f',1,'analog_io_mcu.c']]],
+  ['dac_1',['DAC',['../group___analog___i_o.html#ga4aa2a4ab86ce00c23035e5cee2e7fc7e',1,'analog_io_mcu.h']]],
   ['data_2',['data',['../struct_font__t.html#a579f5164b5b16e18ddcdb0296ef81799',1,'Font_t::data'],['../structicon__font__t.html#a579f5164b5b16e18ddcdb0296ef81799',1,'icon_font_t::data'],['../structlcd__cmd__t.html#abe222f6d3581e7920dcad5306cc906a8',1,'lcd_cmd_t::data']]],
   ['databytes_3',['databytes',['../structlcd__cmd__t.html#a7533a896b545f6fcffae3956eb5d3a6f',1,'lcd_cmd_t']]],
   ['dc_5f100_4',['DC_100',['../pwm__mcu_8c.html#a684bac99a5de1348b0cf76f80c31ae3d',1,'pwm_mcu.c']]],
@@ -37,8 +37,8 @@ var searchData=
   ['dpython_5fdeps_5fchecked_34',['DPYTHON_DEPS_CHECKED',['../bootloader-cfgcmd_8txt.html#adff3294f6aaf3cb0431699320441dbe3',1,'bootloader-cfgcmd.txt']]],
   ['driv_5ftim_5fctrl_5fa_35',['DRIV_TIM_CTRL_A',['../ili9341_8c.html#a12dc1e23eaceb49cbc5643e44ebcddac',1,'ili9341.c']]],
   ['driv_5ftim_5fctrl_5fa_36',['driv_tim_ctrl_a',['../ili9341_8c.html#afc83c18e8d0854b8b4cdb9aca29c312b',1,'ili9341.c']]],
-  ['driv_5ftim_5fctrl_5fb_37',['driv_tim_ctrl_b',['../ili9341_8c.html#a9f16309f2f64840481039f862dac26e6',1,'ili9341.c']]],
-  ['driv_5ftim_5fctrl_5fb_38',['DRIV_TIM_CTRL_B',['../ili9341_8c.html#a5d38d9987627bf2e19312456b3ca399b',1,'ili9341.c']]],
+  ['driv_5ftim_5fctrl_5fb_37',['DRIV_TIM_CTRL_B',['../ili9341_8c.html#a5d38d9987627bf2e19312456b3ca399b',1,'ili9341.c']]],
+  ['driv_5ftim_5fctrl_5fb_38',['driv_tim_ctrl_b',['../ili9341_8c.html#a9f16309f2f64840481039f862dac26e6',1,'ili9341.c']]],
   ['drivers_20devices_39',['Drivers devices',['../group___drivers___devices.html',1,'']]],
   ['drivers_20microcontroller_40',['Drivers microcontroller',['../group___drivers___microcontroller.html',1,'']]],
   ['drivers_20programable_41',['Drivers Programable',['../group___drivers___programable.html',1,'']]],

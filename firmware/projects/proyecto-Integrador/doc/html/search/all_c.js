@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['neg_5fgamma_0',['neg_gamma',['../ili9341_8c.html#a9959a87a6f6cd807a52dc75801af8e6e',1,'ili9341.c']]],
-  ['neg_5fgamma_1',['NEG_GAMMA',['../ili9341_8c.html#a31a6695f5a43385bbd0f5ee988170e06',1,'ili9341.c']]],
+  ['neg_5fgamma_0',['NEG_GAMMA',['../ili9341_8c.html#a31a6695f5a43385bbd0f5ee988170e06',1,'ili9341.c']]],
+  ['neg_5fgamma_1',['neg_gamma',['../ili9341_8c.html#a9959a87a6f6cd807a52dc75801af8e6e',1,'ili9341.c']]],
   ['neopixel_5fcolor_5fblue_2',['NEOPIXEL_COLOR_BLUE',['../group___neo_pixel___stripe.html#ga0b34bb5f5ac15880f7ee287053559470',1,'neopixel_stripe.h']]],
   ['neopixel_5fcolor_5fcyan_3',['NEOPIXEL_COLOR_CYAN',['../group___neo_pixel___stripe.html#ga1bbd4decd349b5f30af62223d2617742',1,'neopixel_stripe.h']]],
   ['neopixel_5fcolor_5fgreen_4',['NEOPIXEL_COLOR_GREEN',['../group___neo_pixel___stripe.html#gac8188c114d2342b3ca60466df01c7111',1,'neopixel_stripe.h']]],

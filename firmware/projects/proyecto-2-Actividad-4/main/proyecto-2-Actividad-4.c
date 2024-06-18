@@ -117,7 +117,7 @@ static void Tarea_pwm(void *pvParameter)
 /**
  * @brief Función invocada en la interrupción del timer A y timer B
  */
-void funcTimer1(void *param)
+void funcTimerMuestreo(void *param)
 {
 	vTaskNotifyGiveFromISR(task_handle, pdFALSE);
 }
@@ -133,7 +133,7 @@ void app_main(void)
 	timer_config_t timer_1 = {
 		.timer = TIMER_A,
 		.period = TIME_PERIOD1,
-		.func_p = funcTimer1,
+		.func_p = funcTimerMuestreo,
 		.param_p = NULL};
 
 	timer_config_t timer_2 = {

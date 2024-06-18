@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Ejemplo 0 Blinking: Referencia del archivo C:/Repositorios/Madrid-1C-2024/firmware/projects/proyecto-Integrador/main/proyecto-Integrador.c</title>
+<title>Proyecto Integrador: Referencia del archivo C:/Repositorios/Madrid-1C-2024/firmware/projects/proyecto-Integrador/main/proyecto-Integrador.c</title>
 <link rel="icon" href="icon.ico" type="image/x-icon" />
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -34,9 +34,8 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="fiuner.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Ejemplo 0 Blinking<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Proyecto Integrador
    </div>
-   <div id="projectbrief">Ejemplo de Blinking</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -118,6 +117,7 @@ $(function(){initNavTree('proyecto-_integrador_8c.html',''); initResizable(); })
 <code>#include &quot;<a class="el" href="buzzer_8h_source.html">buzzer.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ble__mcu_8h_source.html">ble_mcu.h</a>&quot;</code><br />
 <code>#include &quot;iir_filter.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="led_8h_source.html">led.h</a>&quot;</code><br />
 </div>
 <p><a href="proyecto-_integrador_8c_source.html">Ir al código fuente de este archivo.</a></p>
 <table class="memberdecls">
@@ -130,8 +130,11 @@ defines</h2></td></tr>
 <tr class="memdesc:ad5548d90ab19ed665698f2658c0f8446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo (us) de la duración del periodo refractario fisiológico.  <br /></td></tr>
 <tr class="separator:ad5548d90ab19ed665698f2658c0f8446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0aceb417cce879368f0695ad17933a7" id="r_ac0aceb417cce879368f0695ad17933a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0aceb417cce879368f0695ad17933a7">TIME_BUZZER</a>&#160;&#160;&#160;20000</td></tr>
-<tr class="memdesc:ac0aceb417cce879368f0695ad17933a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo (us) que establece el tiempo.  <br /></td></tr>
+<tr class="memdesc:ac0aceb417cce879368f0695ad17933a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo (us) de la tarea del buzzer (se recomienda que sea mayor que la duración del sonido)  <br /></td></tr>
 <tr class="separator:ac0aceb417cce879368f0695ad17933a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f8b826e204ffa93bd71a8c3637690ed" id="r_a9f8b826e204ffa93bd71a8c3637690ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f8b826e204ffa93bd71a8c3637690ed">PERIODO_LEDS</a>&#160;&#160;&#160;1000</td></tr>
+<tr class="memdesc:a9f8b826e204ffa93bd71a8c3637690ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo (ms) para prender/apagar leds.  <br /></td></tr>
+<tr class="separator:a9f8b826e204ffa93bd71a8c3637690ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a145103118f6d9d1129aa4509cf214a13" id="r_a145103118f6d9d1129aa4509cf214a13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a145103118f6d9d1129aa4509cf214a13">BUZZER</a>&#160;&#160;&#160;<a class="el" href="group___g_i_o_p.html#ggaf65604147d0244c9b13cfdc865ad5393a426d08ab85ab3aebbb53eed1a32dfb71">GPIO_3</a></td></tr>
 <tr class="memdesc:a145103118f6d9d1129aa4509cf214a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Se define la variable BUZZER al GPIO3 donde estará conectado el buzzer.  <br /></td></tr>
 <tr class="separator:a145103118f6d9d1129aa4509cf214a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,9 +153,9 @@ Funciones</h2></td></tr>
 <tr class="memitem:aca45ac3490312d20636db14bf276a5dc" id="r_aca45ac3490312d20636db14bf276a5dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca45ac3490312d20636db14bf276a5dc">funcTimerBUZZER</a> (void *param)</td></tr>
 <tr class="memdesc:aca45ac3490312d20636db14bf276a5dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función invocada en la interrupción del timer de la tarea SONAR.  <br /></td></tr>
 <tr class="separator:aca45ac3490312d20636db14bf276a5dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90258c861dd96974dc0dbac15cc5142f" id="r_a90258c861dd96974dc0dbac15cc5142f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90258c861dd96974dc0dbac15cc5142f">funcTimer1</a> (void *param)</td></tr>
-<tr class="memdesc:a90258c861dd96974dc0dbac15cc5142f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función invocada en la interrupción del la tarea procesar y enviar.  <br /></td></tr>
-<tr class="separator:a90258c861dd96974dc0dbac15cc5142f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85f01344f61eb446ab8922bf3feaf2e8" id="r_a85f01344f61eb446ab8922bf3feaf2e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85f01344f61eb446ab8922bf3feaf2e8">funcTimerMuestreo</a> (void *param)</td></tr>
+<tr class="memdesc:a85f01344f61eb446ab8922bf3feaf2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función invocada en la interrupción del la tarea procesar y enviar.  <br /></td></tr>
+<tr class="separator:a85f01344f61eb446ab8922bf3feaf2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab56e1ff0f71e003f2e08c6ec294528b1" id="r_ab56e1ff0f71e003f2e08c6ec294528b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab56e1ff0f71e003f2e08c6ec294528b1">read_data</a> (uint8_t *data, uint8_t length)</td></tr>
 <tr class="memdesc:ab56e1ff0f71e003f2e08c6ec294528b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función que convierte el dato recibido por Bluetooth, y se lo asigna al umbral para la deteccion de las ondas R.  <br /></td></tr>
 <tr class="separator:ab56e1ff0f71e003f2e08c6ec294528b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,9 +170,15 @@ Variables</h2></td></tr>
 <tr class="memitem:a8b0f5eafca1a415b9d6d34c7539b6826" id="r_a8b0f5eafca1a415b9d6d34c7539b6826"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b0f5eafca1a415b9d6d34c7539b6826">muestras_en_periodo_refractario</a> = <a class="el" href="#ad5548d90ab19ed665698f2658c0f8446">PERIODO_REFRACTARIO</a> / <a class="el" href="#aca39b26c504c376043e30f633c1abaf8">PERIODO_MUESTREO</a></td></tr>
 <tr class="memdesc:a8b0f5eafca1a415b9d6d34c7539b6826"><td class="mdescLeft">&#160;</td><td class="mdescRight">muestras_en_periodo_refractario Cantiad de muestras que abarca la duración del perido refractario  <br /></td></tr>
 <tr class="separator:a8b0f5eafca1a415b9d6d34c7539b6826"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b944591e5128dfb3a8d2c7fa5941168" id="r_a2b944591e5128dfb3a8d2c7fa5941168"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b944591e5128dfb3a8d2c7fa5941168">UMBRAL</a> = 400</td></tr>
-<tr class="memdesc:a2b944591e5128dfb3a8d2c7fa5941168"><td class="mdescLeft">&#160;</td><td class="mdescRight">UMRAL Cantiad de muestras que abarca la duración del perido refractario.  <br /></td></tr>
-<tr class="separator:a2b944591e5128dfb3a8d2c7fa5941168"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a448f89ba4e97628bf24d006ce35c06e6" id="r_a448f89ba4e97628bf24d006ce35c06e6"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a448f89ba4e97628bf24d006ce35c06e6">UMBRAL_ONDA_R</a> = 400</td></tr>
+<tr class="memdesc:a448f89ba4e97628bf24d006ce35c06e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">UMRAL Valor umbral que sirve para detectar la onda R.  <br /></td></tr>
+<tr class="separator:a448f89ba4e97628bf24d006ce35c06e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73364d68d982ca61df1f705fb67e94fd" id="r_a73364d68d982ca61df1f705fb67e94fd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73364d68d982ca61df1f705fb67e94fd">UMBRAL_INF_FC</a> = 60</td></tr>
+<tr class="memdesc:a73364d68d982ca61df1f705fb67e94fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">UMBRAL_INF_FC Valor umbral inferior para diferencial valores normales y anormales de la FC.  <br /></td></tr>
+<tr class="separator:a73364d68d982ca61df1f705fb67e94fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af21a5acf4ea89fffac724b0cdf82f696" id="r_af21a5acf4ea89fffac724b0cdf82f696"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af21a5acf4ea89fffac724b0cdf82f696">UMBRAL_SUP_FC</a> = 80</td></tr>
+<tr class="memdesc:af21a5acf4ea89fffac724b0cdf82f696"><td class="mdescLeft">&#160;</td><td class="mdescRight">UMBRAL_SUP_FC Valor umbral superior para diferencial valores normales y anormales de la FC.  <br /></td></tr>
+<tr class="separator:af21a5acf4ea89fffac724b0cdf82f696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af47b1b22f710860d19c1bdf69fbd08f9" id="r_af47b1b22f710860d19c1bdf69fbd08f9"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af47b1b22f710860d19c1bdf69fbd08f9">FC</a> = 0</td></tr>
 <tr class="memdesc:af47b1b22f710860d19c1bdf69fbd08f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">FC Variable que guarda la frecuancia cardiaca momentanea.  <br /></td></tr>
 <tr class="separator:af47b1b22f710860d19c1bdf69fbd08f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,9 +210,9 @@ Variables</h2></td></tr>
 
 <p>Se define la variable BUZZER al GPIO3 donde estará conectado el buzzer. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00063">63</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00067">67</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
 
 </div>
 </div>
@@ -221,7 +230,25 @@ Variables</h2></td></tr>
 
 <p>Cantidad de muestras que se toman para procesar la señal. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00073">73</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00077">77</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+
+</div>
+</div>
+<a id="a9f8b826e204ffa93bd71a8c3637690ed" name="a9f8b826e204ffa93bd71a8c3637690ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f8b826e204ffa93bd71a8c3637690ed">&#9670;&#160;</a></span>PERIODO_LEDS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PERIODO_LEDS&#160;&#160;&#160;1000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tiempo (ms) para prender/apagar leds. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00062">62</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
 </div>
 </div>
@@ -239,9 +266,9 @@ Variables</h2></td></tr>
 
 <p>Tiempo (us) que establece el periodo de muestreo de la señal ECG. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00048">48</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00047">47</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a>.</p>
 
 </div>
 </div>
@@ -259,7 +286,7 @@ Variables</h2></td></tr>
 
 <p>Tiempo (us) de la duración del periodo refractario fisiológico. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00053">53</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00052">52</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
 </div>
 </div>
@@ -277,9 +304,9 @@ Variables</h2></td></tr>
 
 <p>Se define la variable SAMPLE_FREQ la frecuencia del periodo de muestreo para aplicar el filtro. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00068">68</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00072">72</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
 
 </div>
 </div>
@@ -295,11 +322,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tiempo (us) que establece el tiempo. </p>
+<p>Tiempo (us) de la tarea del buzzer (se recomienda que sea mayor que la duración del sonido) </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00058">58</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00057">57</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
 
 </div>
 </div>
@@ -319,9 +346,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00235">235</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00308">308</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="analog__io__mcu_8h_source.html#l00038">ADC_SINGLE</a>, <a class="el" href="analog__io__mcu_8c_source.html#l00045">AnalogInputInit()</a>, <a class="el" href="analog__io__mcu_8c_source.html#l00095">AnalogOutputInit()</a>, <a class="el" href="ble__mcu_8c_source.html#l00452">BleInit()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00063">BUZZER</a>, <a class="el" href="buzzer_8c_source.html#l00043">BuzzerInit()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00032">CH1</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00205">funcTimer1()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00197">funcTimerBUZZER()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00049">analog_input_config_t::input</a>, <a class="el" href="ili9341_8c_source.html#l00019">NULL</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00048">PERIODO_MUESTREO</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00214">read_data()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00068">SAMPLE_FREQ</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00098">task_procesar_enviar</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00101">task_sonar</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00058">TIME_BUZZER</a>, <a class="el" href="timer__mcu_8h_source.html#l00040">timer_config_t::timer</a>, <a class="el" href="timer__mcu_8h_source.html#l00032">TIMER_A</a>, <a class="el" href="timer__mcu_8h_source.html#l00033">TIMER_B</a>, <a class="el" href="timer__mcu_8c_source.html#l00055">TimerInit()</a> y <a class="el" href="timer__mcu_8c_source.html#l00110">TimerStart()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="analog__io__mcu_8h_source.html#l00038">ADC_SINGLE</a>, <a class="el" href="analog__io__mcu_8c_source.html#l00045">AnalogInputInit()</a>, <a class="el" href="analog__io__mcu_8c_source.html#l00095">AnalogOutputInit()</a>, <a class="el" href="ble__mcu_8c_source.html#l00452">BleInit()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00067">BUZZER</a>, <a class="el" href="buzzer_8c_source.html#l00043">BuzzerInit()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00032">CH1</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00237">funcTimerBUZZER()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00245">funcTimerMuestreo()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00049">analog_input_config_t::input</a>, <a class="el" href="led_8c_source.html#l00031">LedsInit()</a>, <a class="el" href="ili9341_8c_source.html#l00019">NULL</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00047">PERIODO_MUESTREO</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00254">read_data()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00072">SAMPLE_FREQ</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00106">task_procesar_enviar</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00109">task_sonar</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00057">TIME_BUZZER</a>, <a class="el" href="timer__mcu_8h_source.html#l00040">timer_config_t::timer</a>, <a class="el" href="timer__mcu_8h_source.html#l00032">TIMER_A</a>, <a class="el" href="timer__mcu_8h_source.html#l00033">TIMER_B</a>, <a class="el" href="timer__mcu_8c_source.html#l00055">TimerInit()</a> y <a class="el" href="timer__mcu_8c_source.html#l00110">TimerStart()</a>.</p>
 
 </div>
 </div>
@@ -348,34 +375,9 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00117">117</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00123">123</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00089">FC</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00083">muestras_en_periodo_refractario</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00048">PERIODO_MUESTREO</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00092">periodo_RR</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00080">sonarBuzzer</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00086">UMBRAL</a>.</p>
-
-</div>
-</div>
-<a id="a90258c861dd96974dc0dbac15cc5142f" name="a90258c861dd96974dc0dbac15cc5142f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90258c861dd96974dc0dbac15cc5142f">&#9670;&#160;</a></span>funcTimer1()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void funcTimer1 </td>
-          <td>(</td>
-          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>param</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Función invocada en la interrupción del la tarea procesar y enviar. </p>
-
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00205">205</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
-
-<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00098">task_procesar_enviar</a>.</p>
-
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00097">FC</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00085">muestras_en_periodo_refractario</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00047">PERIODO_MUESTREO</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00100">periodo_RR</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00082">sonarBuzzer</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00088">UMBRAL_ONDA_R</a>.</p>
 
 </div>
 </div>
@@ -396,11 +398,36 @@ Variables</h2></td></tr>
 
 <p>Función invocada en la interrupción del timer de la tarea SONAR. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00197">197</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00237">237</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00101">task_sonar</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00109">task_sonar</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
+
+</div>
+</div>
+<a id="a85f01344f61eb446ab8922bf3feaf2e8" name="a85f01344f61eb446ab8922bf3feaf2e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85f01344f61eb446ab8922bf3feaf2e8">&#9670;&#160;</a></span>funcTimerMuestreo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void funcTimerMuestreo </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>param</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Función invocada en la interrupción del la tarea procesar y enviar. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00245">245</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="proyecto-_integrador_8c_source.html#l00106">task_procesar_enviar</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
 
 </div>
 </div>
@@ -431,11 +458,11 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00214">214</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00254">254</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="ble__mcu_8c_source.html#l00544">BleSendString()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00086">UMBRAL</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="ble__mcu_8c_source.html#l00544">BleSendString()</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00091">UMBRAL_INF_FC</a>, <a class="el" href="proyecto-_integrador_8c_source.html#l00088">UMBRAL_ONDA_R</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00094">UMBRAL_SUP_FC</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a>.</p>
 
 </div>
 </div>
@@ -454,9 +481,9 @@ Variables</h2></td></tr>
 
 <p>FC Variable que guarda la frecuancia cardiaca momentanea. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00089">89</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00097">97</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a>.</p>
 
 </div>
 </div>
@@ -474,9 +501,9 @@ Variables</h2></td></tr>
 
 <p>muestras_en_periodo_refractario Cantiad de muestras que abarca la duración del perido refractario </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00083">83</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00085">85</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a>.</p>
 
 </div>
 </div>
@@ -494,9 +521,9 @@ Variables</h2></td></tr>
 
 <p>periodo_RR Variable que guarda cantidad de muestras entre dos picos R </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00092">92</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00100">100</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a>.</p>
 
 </div>
 </div>
@@ -514,9 +541,9 @@ Variables</h2></td></tr>
 
 <p>sonarBuzzer Badera que se utiliza para verificar si se debe activar el buzzer </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00080">80</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00082">82</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a>.</p>
 
 </div>
 </div>
@@ -534,9 +561,9 @@ Variables</h2></td></tr>
 
 <p>Objeto de tipo TaskHandle_t que se asocia con la tarea de procesar y enviar datos. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00098">98</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00106">106</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00205">funcTimer1()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00245">funcTimerMuestreo()</a>.</p>
 
 </div>
 </div>
@@ -554,29 +581,69 @@ Variables</h2></td></tr>
 
 <p>Objeto de tipo TaskHandle_t que se asocia con la tarea de sonar el buzzer. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00101">101</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00109">109</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00235">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00197">funcTimerBUZZER()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00308">app_main()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00237">funcTimerBUZZER()</a>.</p>
 
 </div>
 </div>
-<a id="a2b944591e5128dfb3a8d2c7fa5941168" name="a2b944591e5128dfb3a8d2c7fa5941168"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b944591e5128dfb3a8d2c7fa5941168">&#9670;&#160;</a></span>UMBRAL</h2>
+<a id="a73364d68d982ca61df1f705fb67e94fd" name="a73364d68d982ca61df1f705fb67e94fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73364d68d982ca61df1f705fb67e94fd">&#9670;&#160;</a></span>UMBRAL_INF_FC</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int16_t UMBRAL = 400</td>
+          <td class="memname">int16_t UMBRAL_INF_FC = 60</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>UMRAL Cantiad de muestras que abarca la duración del perido refractario. </p>
+<p>UMBRAL_INF_FC Valor umbral inferior para diferencial valores normales y anormales de la FC. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00086">86</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00091">91</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00117">detectar_ondaR()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00214">read_data()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00254">read_data()</a>.</p>
+
+</div>
+</div>
+<a id="a448f89ba4e97628bf24d006ce35c06e6" name="a448f89ba4e97628bf24d006ce35c06e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a448f89ba4e97628bf24d006ce35c06e6">&#9670;&#160;</a></span>UMBRAL_ONDA_R</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t UMBRAL_ONDA_R = 400</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UMRAL Valor umbral que sirve para detectar la onda R. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00088">88</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00123">detectar_ondaR()</a> y <a class="el" href="proyecto-_integrador_8c_source.html#l00254">read_data()</a>.</p>
+
+</div>
+</div>
+<a id="af21a5acf4ea89fffac724b0cdf82f696" name="af21a5acf4ea89fffac724b0cdf82f696"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af21a5acf4ea89fffac724b0cdf82f696">&#9670;&#160;</a></span>UMBRAL_SUP_FC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t UMBRAL_SUP_FC = 80</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UMBRAL_SUP_FC Valor umbral superior para diferencial valores normales y anormales de la FC. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00094">94</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="proyecto-_integrador_8c_source.html#l00254">read_data()</a>.</p>
 
 </div>
 </div>
@@ -594,7 +661,7 @@ Variables</h2></td></tr>
 
 <p>valor_actual Variable que guarda el valor actual muestreado </p>
 
-<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00095">95</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="proyecto-_integrador_8c_source.html#l00103">103</a> del archivo <a class="el" href="proyecto-_integrador_8c_source.html">proyecto-Integrador.c</a>.</p>
 
 </div>
 </div>

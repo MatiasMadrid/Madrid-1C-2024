@@ -21,9 +21,11 @@ var searchData=
   ['uartsendbuffer_18',['UartSendBuffer',['../group___u_a_r_t.html#ga81fce0b6465799566af3cc8cc896c45e',1,'UartSendBuffer(uart_mcu_port_t port, const char *data, uint8_t nbytes):&#160;uart_mcu.c'],['../group___u_a_r_t.html#ga81fce0b6465799566af3cc8cc896c45e',1,'UartSendBuffer(uart_mcu_port_t port, const char *data, uint8_t nbytes):&#160;uart_mcu.c']]],
   ['uartsendbyte_19',['UartSendByte',['../group___u_a_r_t.html#gaeb142fa2425b80bddba60121b1cf13f2',1,'UartSendByte(uart_mcu_port_t port, const char *data):&#160;uart_mcu.c'],['../group___u_a_r_t.html#gaeb142fa2425b80bddba60121b1cf13f2',1,'UartSendByte(uart_mcu_port_t port, const char *data):&#160;uart_mcu.c']]],
   ['uartsendstring_20',['UartSendString',['../group___u_a_r_t.html#ga60db217694ea24ad75fcedda3336a3a8',1,'UartSendString(uart_mcu_port_t port, const char *msg):&#160;uart_mcu.c'],['../group___u_a_r_t.html#ga60db217694ea24ad75fcedda3336a3a8',1,'UartSendString(uart_mcu_port_t port, const char *msg):&#160;uart_mcu.c']]],
-  ['umbral_21',['UMBRAL',['../proyecto-_integrador_8c.html#a2b944591e5128dfb3a8d2c7fa5941168',1,'proyecto-Integrador.c']]],
-  ['up_22',['UP',['../ili9341_8c.html#a1965eaca47dbf3f87acdafc2208f04eb',1,'ili9341.c']]],
-  ['us2cm_23',['US2CM',['../hc__sr04_8c.html#a5e52844206c91ee47dcdf1697595b43a',1,'hc_sr04.c']]],
-  ['us2inch_24',['US2INCH',['../hc__sr04_8c.html#a34f3975d94758e78ddea4f3bcac2398b',1,'hc_sr04.c']]],
-  ['us_5fresolution_5fhz_25',['US_RESOLUTION_HZ',['../delay__mcu_8c.html#a0084affffdb426de14a2629cfe92c652',1,'US_RESOLUTION_HZ:&#160;delay_mcu.c'],['../timer__mcu_8c.html#a0084affffdb426de14a2629cfe92c652',1,'US_RESOLUTION_HZ:&#160;timer_mcu.c']]]
+  ['umbral_5finf_5ffc_21',['UMBRAL_INF_FC',['../proyecto-_integrador_8c.html#a73364d68d982ca61df1f705fb67e94fd',1,'proyecto-Integrador.c']]],
+  ['umbral_5fonda_5fr_22',['UMBRAL_ONDA_R',['../proyecto-_integrador_8c.html#a448f89ba4e97628bf24d006ce35c06e6',1,'proyecto-Integrador.c']]],
+  ['umbral_5fsup_5ffc_23',['UMBRAL_SUP_FC',['../proyecto-_integrador_8c.html#af21a5acf4ea89fffac724b0cdf82f696',1,'proyecto-Integrador.c']]],
+  ['up_24',['UP',['../ili9341_8c.html#a1965eaca47dbf3f87acdafc2208f04eb',1,'ili9341.c']]],
+  ['us2cm_25',['US2CM',['../hc__sr04_8c.html#a5e52844206c91ee47dcdf1697595b43a',1,'hc_sr04.c']]],
+  ['us2inch_26',['US2INCH',['../hc__sr04_8c.html#a34f3975d94758e78ddea4f3bcac2398b',1,'hc_sr04.c']]],
+  ['us_5fresolution_5fhz_27',['US_RESOLUTION_HZ',['../delay__mcu_8c.html#a0084affffdb426de14a2629cfe92c652',1,'US_RESOLUTION_HZ:&#160;delay_mcu.c'],['../timer__mcu_8c.html#a0084affffdb426de14a2629cfe92c652',1,'US_RESOLUTION_HZ:&#160;timer_mcu.c']]]
 ];
